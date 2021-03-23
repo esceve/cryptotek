@@ -137,7 +137,6 @@ module.exports = client => {
         else{
             exist = true;
         }
-        console.log(`Dans le fetch, Existe = ${exist}`)
         return exist;
         
     }
