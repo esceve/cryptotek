@@ -3,7 +3,7 @@ const {Collection } = require("discord.js");
 
 module.exports = async (bot,message) => {
     const settings = await bot.getGuild(message.guild);
-    const dbUser = await bot.getUser(message.member);
+    let dbUser = await bot.getUser(message.member);
     if(message.author.bot) return;
 
     if(!dbUser) await bot.createUser({
