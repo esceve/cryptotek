@@ -11,9 +11,9 @@ module.exports.run = async (client,message,args) => {
                 .addField(`:warning:`,`Vous n'avez pas encore de compte, plus d'informations avec \`!help addaccount\``)
                 .setColor("#dc5500")
             }else {
-                for(const accName of user.accounts){
+                for(let i = 0; i < user.accounts.length;i++){
                     embed
-                    .addField(`${accName}`,``)
+                    .addField(`${i}: `,`${user.accounts[i]}`)
                     .setColor("#006699");
                 }
             }
