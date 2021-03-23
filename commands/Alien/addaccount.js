@@ -14,15 +14,14 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
         message.channel.send(embed);
         return;
     }else {
-        console.log(client.accountExist(accName,message.guild))
-        const compteExiste = client.accountExist(accName,message.guild);
+        const compteExiste = await client.accountExist(accName,message.guild);
         console.log('Existe = '+compteExiste)
         if(compteExiste){
-            const account = await client.createAccount({
+            await client.createAccount({
                 username : message.member.user.tag,
                 name : accName,
             });
-            account.then(async () => await client.updateBalance(accName,message.guild))
+            await client.updateBalance(accName,message.guild)
             let acc = dbUser.accounts;
             if(!acc.includes(accName)) acc.push(accName);
             await client.updateUser(message.member.user, {accounts: acc});
