@@ -2,48 +2,38 @@ const { MESSAGES } = require("../../util/constants");
 const {MessageEmbed} = require("discord.js");
 
 module.exports.run = async (client,message,args,settings,dbUser) => {
-    const accName = args[0];
-    let data = await client.getAccount(accName);
-    if(data){
-        const embed = new MessageEmbed()
-        .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
-        .setDescription(`Le compte ${accName} a déjà été ajouté à la base de données par ${data.username}.`)
-        .setColor("#dc0000")
-        .setFooter("Le compte est déjà présent dans la base de données")
-        .setTimestamp();
-        message.channel.send(embed);
-        return;
-    }else {
-        const compteExiste = await client.accountExist(accName,message.guild);
-        if(compteExiste){
-            await client.createAccount({
-                username : message.member.user.tag,
-                name : accName,
-            });
-            client.updateBalance(accName,message.guild)
-            let acc = dbUser.accounts;
-            if(!acc.includes(accName)) acc.push(accName);
-            await client.updateUser(message.member.user, {accounts: acc});
-    
-            const embed = new MessageEmbed()
-            .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
-            .setDescription(`Le compte ${accName} a bien été ajouté.`)
-            .setColor("#92f058")
-            .setFooter("Ce compte a été ajouté avec succès")
-            .setTimestamp();
-            message.channel.send(embed);
+    const embed = new MessageEmbed()
+                .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
+                .setColor("#92f058")
+                .setFooter("Ce compte a été ajouté avec succès")
+                .setTimestamp();
+    args.forEach(accName => {
+        let data = await client.getAccount(accName);
+        if(data){
+            embed
+            .addField(`Bot `, `${accName} a déjà été ajouté par ${data.username}.`)
         }else {
-            const embed = new MessageEmbed()
-            .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
-            .setDescription(`Le compte ${accName} n'existe pas, veuillez vérifier si le nom du compte est correcte.`)
-            .setColor("#dc0000")
-            .setFooter("Nom de compte invalide.")
-            .setTimestamp();
-            message.channel.send(embed);
-            return;
-        }
+            const compteExiste = await client.accountExist(accName,message.guild);
+            if(compteExiste){
+                await client.createAccount({
+                    username : message.member.user.tag,
+                    name : accName,
+                });
+                client.updateBalance(accName,message.guild)
+                let acc = dbUser.accounts;
+                if(!acc.includes(accName)) acc.push(accName);
+                await client.updateUser(message.member.user, {accounts: acc});
+                embed
+                .addField(`Bot `,`${accName} ajouté avec succès`)
+                
+            }else {
+                embed
+                .addField(`Bot `, `${accName} n'existe pas.`)
+            }
 
-    }
+        }
+    } )
+    message.channel.send(embed);
     
 };
 
