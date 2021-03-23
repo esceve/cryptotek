@@ -15,37 +15,33 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
         return;
     }else {
         const compteExiste = await client.accountExist(accName,message.guild);
-        console.log(compteExiste);
-        compteExiste.then( async exist => {
-            if(exist){
-                const account = await client.createAccount({
-                    username : message.member.user.tag,
-                    name : accName,
-                });
-                account.then(async () => await client.updateBalance(accName,message.guild))
-                let acc = dbUser.accounts;
-                if(!acc.includes(accName)) acc.push(accName);
-                await client.updateUser(message.member.user, {accounts: acc});
-        
-                const embed = new MessageEmbed()
-                .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
-                .setDescription(`Le compte ${accName} a bien été ajouté.`)
-                .setColor("#92f058")
-                .setFooter("Ce compte a été ajouté avec succès")
-                .setTimestamp();
-                message.channel.send(embed);
-            }else {
-                const embed = new MessageEmbed()
-                .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
-                .setDescription(`Le compte ${accName} n'existe pas, veuillez vérifier si le nom du compte est correcte.`)
-                .setColor("#dc0000")
-                .setFooter("Nom de compte invalide.")
-                .setTimestamp();
-                message.channel.send(embed);
-                return;
-            }
-        })
-
+        if(compteExiste){
+            const account = await client.createAccount({
+                username : message.member.user.tag,
+                name : accName,
+            });
+            account.then(async () => await client.updateBalance(accName,message.guild))
+            let acc = dbUser.accounts;
+            if(!acc.includes(accName)) acc.push(accName);
+            await client.updateUser(message.member.user, {accounts: acc});
+    
+            const embed = new MessageEmbed()
+            .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
+            .setDescription(`Le compte ${accName} a bien été ajouté.`)
+            .setColor("#92f058")
+            .setFooter("Ce compte a été ajouté avec succès")
+            .setTimestamp();
+            message.channel.send(embed);
+        }else {
+            const embed = new MessageEmbed()
+            .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
+            .setDescription(`Le compte ${accName} n'existe pas, veuillez vérifier si le nom du compte est correcte.`)
+            .setColor("#dc0000")
+            .setFooter("Nom de compte invalide.")
+            .setTimestamp();
+            message.channel.send(embed);
+            return;
+        }
     }
     
 };
