@@ -102,4 +102,41 @@ module.exports = client => {
         })
         
     }
+    client.accountExist = async (acc,guild) => {
+
+        const datas = client.queryFetch(
+            `
+            query($account: String!, $limit: Uint32, $opts: [ACCOUNT_BALANCE_OPTION!]) {
+                accountBalances(account: $account,limit: $limit, options: $opts) {
+                blockRef {
+                    id
+                    number
+                }
+                edges {
+                    node {
+                    account
+                    symbol
+                    balance
+                    }
+                }
+                }
+            }
+            `,
+            {
+                "account": acc,
+                "opts": [
+                "EOS_INCLUDE_STAKED"
+                ],
+                "limit": 10
+            },guild
+        );
+        datas.then( async data => {
+            if(!data.data.accountBalances.edges.length){
+                return false
+            } 
+            else{
+                return true
+            }
+        })
+    }
 };

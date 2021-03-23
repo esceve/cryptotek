@@ -112,9 +112,19 @@ const MESSAGES = {
                 name : 'checkbalance',
                 aliases : ['checkbalance','balance'],
                 category : 'alien',
-                description : "Renvoie la quantité de WAX/TLM de l'utilisateur",
+                description : "Renvoie la quantité de WAX/TLM du compte.\nSans paramètres, la commande renvoie la quantité de WAX/TLM de tous les comptes associés à l'utilisateur.",
                 args: false,
                 usage : '<@nom_du_compte.wam>',
+                cooldown : 2
+
+            },
+            SHOWACCOUNT : {
+                name : 'showaccount',
+                aliases : ['showaccount', 'showacc'],
+                category : 'alien',
+                description : "Affiche le nom des comptes AlienWorlds de l'utilisateur",
+                args: false,
+                usage : '',
                 cooldown : 2
 
             }
