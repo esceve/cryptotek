@@ -16,11 +16,12 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
     }else {
         const compteExiste = await client.accountExist(accName,message.guild);
         if(compteExiste){
-            const account = await client.createAccount({
+            await client.createAccount({
                 username : message.member.user.tag,
                 name : accName,
             });
-            account.then(async () => await client.updateBalance(accName,message.guild))
+            data = await client.getAccount(accName);
+            data.then(async () => await client.updateBalance(accName,message.guild))
             let acc = dbUser.accounts;
             if(!acc.includes(accName)) acc.push(accName);
             await client.updateUser(message.member.user, {accounts: acc});
