@@ -60,5 +60,6 @@ module.exports = async (bot,message) => {
     setTimeout(()=> tStamps.delete(message.author.id), cdAmount);
     //                                                                                                                               //
     //Execution de la commande
+    dbUser = await bot.getUser(message.member);
     command.run(bot,message,args, settings,dbUser);
 }

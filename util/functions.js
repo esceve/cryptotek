@@ -70,4 +70,8 @@ module.exports =  client => {
         return data.updateOne(settings);
     };
 
+    client.deleteAccount = async account => {
+        let data = await client.getAccount(account);
+        return data.deleteOne();
+    };
 };

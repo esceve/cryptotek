@@ -92,7 +92,17 @@ const MESSAGES = {
                 name : 'addaccount',
                 aliases : ['addaccount', 'mkacc'],
                 category : 'alien',
-                description : "ajoute un compte AlienWorlds à la base de données",
+                description : "Ajoute un compte AlienWorlds à la base de données",
+                args: true,
+                usage : '<@nom_du_compte.wam>',
+                cooldown : 2
+
+            },
+            REMOVEACCOUNT : {
+                name : 'removeaccount',
+                aliases : ['removeaccount', 'rmacc'],
+                category : 'alien',
+                description : "Supprime un compte AlienWorlds de la base de données",
                 args: true,
                 usage : '<@nom_du_compte.wam>',
                 cooldown : 2

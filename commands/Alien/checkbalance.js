@@ -1,6 +1,7 @@
 const { MESSAGES } = require("../../util/constants");
 const {MessageEmbed} = require('discord.js');
 module.exports.run = async (client,message,args) => {
+    
     if(!args.length) {
         let user = await client.getUser(message.member.user);
         const embed = new MessageEmbed()
