@@ -14,6 +14,7 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
         message.channel.send(embed);
         return;
     }else {
+        console.log(client.accountExist(accName,message.guild))
         const compteExiste = client.accountExist(accName,message.guild);
         console.log('Existe = '+compteExiste)
         if(compteExiste){
