@@ -130,14 +130,16 @@ module.exports = client => {
                 "limit": 10
             },guild
         );
+        let exist = false;
         datas.then( data => {
             console.log(`Taille du tableau : ${data.data.accountBalances.edges.length}`)
             if(data.data.accountBalances.edges.length == 0){
-                return false
+                exist = false;
             } 
             else{
-                return true
+                exist = true;
             }
         })
+        return exist;
     }
 };
