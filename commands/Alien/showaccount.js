@@ -13,7 +13,7 @@ module.exports.run = async (client,message,args) => {
             }else {
                 for(let i = 0; i < user.accounts.length;i++){
                     embed
-                    .addField(`${i}: `,`${user.accounts[i]}`,true)
+                    .addField(`Compte n°${i} : `,`${user.accounts[i]}`,true)
                     .setColor("#006699");
                 }
             }

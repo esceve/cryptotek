@@ -15,14 +15,13 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
         return;
     }else {
         const compteExiste = await client.accountExist(accName,message.guild);
-        setTimeout(async ()=> {
-            if(compteExiste){
-                await client.createAccount({
+        compteExiste.then( exist => {
+            if(exist){
+                const account = await client.createAccount({
                     username : message.member.user.tag,
                     name : accName,
                 });
-                
-                setTimeout(async ()=> await client.updateBalance(accName,message.guild),1000)
+                account.then(async () => await client.updateBalance(accName,message.guild))
                 let acc = dbUser.accounts;
                 if(!acc.includes(accName)) acc.push(accName);
                 await client.updateUser(message.member.user, {accounts: acc});
@@ -44,8 +43,7 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
                 message.channel.send(embed);
                 return;
             }
-        },1000)
-        
+        })
 
     }
     
