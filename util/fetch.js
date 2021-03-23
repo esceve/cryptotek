@@ -102,7 +102,7 @@ module.exports = client => {
         })
         
     }
-    client.accountExist = async (acc,guild) => {
+    client.accountExist = (acc,guild) => {
 
         const datas = client.queryFetch(
             `
@@ -130,18 +130,21 @@ module.exports = client => {
                 "limit": 10
             },guild
         );
-        
+
         datas.then( data => {
-            let exist = false;
-            console.log(`Taille du tableau : ${data.data.accountBalances.edges.length}`)
-            if(data.data.accountBalances.edges.length == 0){
-                exist = false;
-            } 
-            else{
-                exist = true;
-            }
-            console.log('Dans le fetch, existe = '+exist)
-            return exist;
-        })
+            try {
+                let exist = false;
+                if(data.data.accountBalances.edges.length == 0){
+                    exist = false;
+                } 
+                else{
+                    exist = true;
+                }
+                return exist;
+           } catch(error) {
+             console.log('Error happened here!')
+             console.error(error)
+           }
+          })
     }
 };
