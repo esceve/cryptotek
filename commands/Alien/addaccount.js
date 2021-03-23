@@ -20,8 +20,7 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
                 username : message.member.user.tag,
                 name : accName,
             });
-            data = await client.getAccount(accName);
-            data.then(async () => await client.updateBalance(accName,message.guild))
+            client.updateBalance(accName,message.guild)
             let acc = dbUser.accounts;
             if(!acc.includes(accName)) acc.push(accName);
             await client.updateUser(message.member.user, {accounts: acc});
