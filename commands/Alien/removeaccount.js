@@ -39,4 +39,4 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
     
 };
 
-module.exports.help = MESSAGES.COMMANDS.ALIEN.ADDACCOUNT;
+module.exports.help = MESSAGES.COMMANDS.ALIEN.REMOVEACCOUNT;
