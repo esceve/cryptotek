@@ -131,7 +131,7 @@ module.exports = client => {
             },guild
         );
         let exist = false;
-        if(data.data.accountBalances.edges.length == 0){
+        if(datas.data.accountBalances.edges.length == 0){
             exist = false;
         } 
         else{
