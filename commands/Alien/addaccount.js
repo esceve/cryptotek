@@ -34,6 +34,7 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
             .setTimestamp();
             message.channel.send(embed);
         }else {
+            console.log('Dans le addaccount, existe = '+compteExiste)
             const embed = new MessageEmbed()
             .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
             .setDescription(`Le compte ${accName} n'existe pas, veuillez vérifier si le nom du compte est correcte.`)
