@@ -4,12 +4,12 @@ const {MessageEmbed} = require("discord.js");
 module.exports.run = async (client,message,args,settings,dbUser) => {
     const accName = args[0];
     let data = await client.getAccount(accName);
-    if(data){
+    if(!data){
         const embed = new MessageEmbed()
         .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
-        .setDescription(`Le compte ${accName} n'existe pas ou a déjà été supprimé.`)
+        .setDescription(`Le compte ${accName} n'existe pas ou a déjà été supprimé de la base de données.`)
         .setColor("#dc0000")
-        .setFooter("Le compte n'existe pas.")
+        .setFooter("Le compte n'est pas présent dans la DB.")
         .setTimestamp();
         message.channel.send(embed);
         return;
@@ -31,7 +31,7 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
         const embed = new MessageEmbed()
         .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
         .setDescription(`Le compte ${accName} a bien été supprimé.`)
-        .setColor("#92f058")
+        .setColor("#92f000")
         .setFooter("Ce compte a été supprimé avec succès")
         .setTimestamp();
         message.channel.send(embed);
