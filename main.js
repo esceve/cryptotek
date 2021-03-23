@@ -1,7 +1,8 @@
 
 const { Client, Collection } = require("discord.js");
-const {loadCommands,loadEvents} = require("./util/loader");
+const { loadCommands, loadEvents } = require("./util/loader");
 
+require('dotenv').config();
 
 const bot = new Client();
 require("./util/functions")(bot);
