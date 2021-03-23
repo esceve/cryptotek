@@ -15,6 +15,7 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
         return;
     }else {
         const compteExiste = await client.accountExist(accName,message.guild);
+        console.log('Dans le addaccount, existe = '+compteExiste)
         if(compteExiste){
             const account = await client.createAccount({
                 username : message.member.user.tag,
