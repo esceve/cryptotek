@@ -5,13 +5,21 @@ module.exports.run = async (client,message,args) => {
         let user = await client.getUser(message.member.user);
         const embed = new MessageEmbed()
         .setAuthor(`${message.member.displayName}`,message.member.user.displayAvatarURL())
-        .setColor("#006699")
         .setTimestamp();
-        for(const accName of user.accounts){
-            await client.updateBalance(accName,message.guild);
-            let acc = await client.getAccount(accName);
-            embed.addField(`${acc.name}`,`Nombre de WAX : ${acc.nbWAX}\nNombre de TLM : ${acc.nbTLM}`);
+        if(!user.accounts.length) {
+            embed
+            .addField(`:warning:`,`Vous n'avez pas encore de compte, plus d'informations avec \`!help addaccount\``)
+            .setColor("#dc5500")
+        }else {
+            for(const accName of user.accounts){
+                await client.updateBalance(accName,message.guild);
+                let acc = await client.getAccount(accName);
+                embed
+                .addField(`${acc.name}`,`Nombre de WAX : ${acc.nbWAX}\nNombre de TLM : ${acc.nbTLM}`)
+                .setColor("#006699");
+            }
         }
+        
         message.channel.send(embed);
     }else {
         await client.updateBalance(args[0],message.guild);
