@@ -131,7 +131,7 @@ module.exports = client => {
             },guild
         );
         datas.then( async data => {
-            if(!data.data.accountBalances.edges.length){
+            if(data.data.accountBalances.edges.length == 0){
                 return false
             } 
             else{
