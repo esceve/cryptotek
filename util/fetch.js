@@ -140,4 +140,22 @@ module.exports = client => {
         return exist;
         
     }
+    client.tlmPrice = async () => {
+        require('axios')
+        .get("https://api.nomics.com/v1/currencies/sparkline?key=91590672029d8269ed230d5d5c0e3024&ids=TLM&start=2021-03-14T00%3A00%3A00Z&convert=EUR")
+        .then(response => {
+            response.prices[0]
+         }
+        )
+    }
+
+    client.waxPrice = async () => {
+        require('axios')
+        .get("https://api.nomics.com/v1/currencies/sparkline?key=91590672029d8269ed230d5d5c0e3024&ids=WAXP&start=2021-03-14T00%3A00%3A00Z&convert=EUR")
+        .then(response => {
+            response.prices[0]
+         }
+        )
+    }
+    
 };
