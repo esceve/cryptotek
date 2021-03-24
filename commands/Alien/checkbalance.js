@@ -17,8 +17,8 @@ module.exports.run = async (client,message,args) => {
                 for(const accName of user.accounts){
                     setTimeout(() => client.updateBalance(accName, message.guild), 500)
                     let acc = await client.getAccount(accName);
-                    nbWax += acc.nbWAX;
-                    nbTlm += acc.nbTLM;
+                    nbWax += parseFloat(acc.nbWAX);
+                    nbTlm += parseFloat(acc.nbTLM);
                     embed
                         .addField(`${acc.name}`,`Nombre de WAX : ${acc.nbWAX}\nNombre de TLM : ${acc.nbTLM}`)
                         .setColor("#006699");
