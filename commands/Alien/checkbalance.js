@@ -1,10 +1,10 @@
 const { MESSAGES } = require("../../util/constants");
 const {MessageEmbed} = require('discord.js');
 module.exports.run = async (client,message,args) => {
-    setTimeout(async () => {
+
         if(!args.length) {
             let user = await client.getUser(message.member.user);
-            const embed = new MessageEmbed()
+            let embed = new MessageEmbed()
             .setAuthor(`${message.member.displayName}`,message.member.user.displayAvatarURL())
             .setTimestamp();
             if(!user.accounts.length) {
@@ -13,17 +13,17 @@ module.exports.run = async (client,message,args) => {
                 .setColor("#dc5500")
             }else {
                 for(const accName of user.accounts){
-                    await client.updateBalance(accName,message.guild);
+                    setTimeout(() => client.updateBalance(accName, message.guild), 500)
                     let acc = await client.getAccount(accName);
                     embed
-                    .addField(`${acc.name}`,`Nombre de WAX : ${acc.nbWAX}\nNombre de TLM : ${acc.nbTLM}`)
-                    .setColor("#006699");
+                        .addField(`${acc.name}`,`Nombre de WAX : ${acc.nbWAX}\nNombre de TLM : ${acc.nbTLM}`)
+                        .setColor("#006699");
                 }
             }
             
             message.channel.send(embed);
         }else {
-            await client.updateBalance(args[0],message.guild);
+            client.updateBalance(args[0],message.guild);
             let acc = await client.getAccount(args[0])
             const embed = new MessageEmbed()
                 .setAuthor(`${message.member.displayName} (${acc.name})`,message.member.user.displayAvatarURL())
@@ -35,8 +35,7 @@ module.exports.run = async (client,message,args) => {
                 .setTimestamp();
                 message.channel.send(embed);
         }
-    },1000);
-    
+
 
 };
 

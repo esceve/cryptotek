@@ -61,7 +61,7 @@ module.exports =  client => {
         else return;
     };
 
-    client.updateAccount = async (account,settings) => {
+    client.updateAccount = async (account, settings) => {
         let data = await client.getAccount(account);
         if (typeof data !== "object") data ={};
         for (const key in settings){
