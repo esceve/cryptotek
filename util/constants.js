@@ -54,6 +54,15 @@ const MESSAGES = {
                 args: true,
                 usage : '@<utilisateur>',
                 cooldown : 10
+            },
+            PRICE : {
+                name: 'price',
+                aliases: ['price', 'currency'],
+                category: 'misc',
+                description: "indique le court a l'instant T du WAX->EUR et TLM->WAX",
+                args: false,
+                usage: '',
+                cooldown: 2
             }
         },
         ADMIN : {
