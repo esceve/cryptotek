@@ -98,6 +98,7 @@ module.exports = client => {
                 }
             await client.updateAccount(account.name, { nbWAX : wax});
             await client.updateAccount(account.name, { nbTLM : tlm});
+
             })
         
     }
