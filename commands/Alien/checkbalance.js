@@ -34,11 +34,11 @@ module.exports.run = async (client,message,args) => {
         }else {
             client.updateBalance(args[0],message.guild);
             let acc = await client.getAccount(args[0])
+            
             const embed = new MessageEmbed()
                 .setAuthor(`${message.member.displayName} (${acc.name})`,message.member.user.displayAvatarURL())
                 .addFields(
                     {name:'Nombre de WAX: ', value : acc.nbWAX, inline: true},
-                    {name:'Nombre de TLM: ', value : acc.nbTLM, inline: true},
                     {name:'Nombre de TLM: ', value : acc.nbTLM, inline: true},
                     {name: 'ShitListed: ', value: acc.isShitListed, inline: true},
                 )
