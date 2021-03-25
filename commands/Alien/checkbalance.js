@@ -29,7 +29,7 @@ module.exports.run = async (client,message,args) => {
             var tlmToWax = nbTlm * nbTlmEUR;
             var totalWax = tlmToWax + nbWax;
             var WaxToEur = totalWax * nbWaxEUR;
-            embed.addField(`Total: `,`Shitlisted: ${acc.isShitListed ? "OUI" : "NON"}\nNombre de WAX : ${nbWax}\nNombre de TLM : ${nbTlm}\n ${WaxToEur} EUR`)
+            embed.addField(`Total: `,`Nombre de WAX : ${nbWax}\nNombre de TLM : ${nbTlm}\n ${WaxToEur} EUR`)
             message.channel.send(embed);
         }else {
             client.updateBalance(args[0],message.guild);
@@ -38,7 +38,9 @@ module.exports.run = async (client,message,args) => {
                 .setAuthor(`${message.member.displayName} (${acc.name})`,message.member.user.displayAvatarURL())
                 .addFields(
                     {name:'Nombre de WAX: ', value : acc.nbWAX, inline: true},
-                    {name:'Nombre de TLM: ', value : acc.nbTLM, inline: true}
+                    {name:'Nombre de TLM: ', value : acc.nbTLM, inline: true},
+                    {name:'Nombre de TLM: ', value : acc.nbTLM, inline: true},
+                    {name: 'Shitlisted: ', value: acc.isShitListed, inline: true},
                 )
                 .setColor("#006699")
                 .setTimestamp();
