@@ -6,7 +6,8 @@ module.exports.run = async (client,message,args) => {
             let nbWax = 0;
             let nbTlm = 0;
             let user = await client.getUser(message.member.user);
-            let embed = new MessageEmbed()
+            let embed = new MessageEmbed();
+            embed
                 .setAuthor(`${message.member.displayName}`,message.member.user.displayAvatarURL())
                 .setTimestamp();
             if(!user.accounts.length) {
@@ -34,13 +35,21 @@ module.exports.run = async (client,message,args) => {
         }else {
             client.updateBalance(args[0],message.guild);
             let acc = await client.getAccount(args[0])
-            
+            var nbWax = parseFloat(acc.nbWAX);
+            var nbTlm = parseFloat(acc.nbTLM);
+
+            let nbWaxEUR = await client.waxPrice();
+            let nbTlmEUR = await client.tlmPrice();
+            var tlmToWax = nbTlm * nbTlmEUR;
+            var totalWax = tlmToWax + nbWax;
+            var WaxToEur = totalWax * nbWaxEUR;
             const embed = new MessageEmbed()
                 .setAuthor(`${message.member.displayName} (${acc.name})`,message.member.user.displayAvatarURL())
                 .addFields(
-                    {name:'Nombre de WAX: ', value : acc.nbWAX, inline: true},
-                    {name:'Nombre de TLM: ', value : acc.nbTLM, inline: true},
-                    {name: 'ShitListed: ', value: acc.isShitListed ? Oui : Non, inline: true},
+                    {name:'Nombre de WAX: ', value : acc.nbWAX},
+                    {name:'Nombre de TLM: ', value : acc.nbTLM},
+                    {name: 'ShitListed: ', value: acc.isShitListed ? "Oui" : "Non"},
+                    {name: "To EUR", value:  `${WaxToEur} EUR`}
                 )
                 .setColor("#006699")
                 .setTimestamp();
