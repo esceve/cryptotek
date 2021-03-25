@@ -9,11 +9,18 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
     for(const accName of args){
         let data = await client.getAccount(accName);
         if(data){
-            embed
-            .addField(`Bot `, `${accName} a déjà été ajouté par ${data.username}.`)
-        }else {
+            if(!data.username){ //Cas où le compte a été créé mais sans utilisateur
+                await client.updateAccount(data.name, { username : message.member.user.tag});
+                let acc = dbUser.accounts;
+                if(!acc.includes(accName)) acc.push(accName);
+                await client.updateUser(message.member.user, {accounts: acc});
+                embed.addField(`Bot `,`${accName} ajouté avec succès`)
+            }else { // Cas où le compte a été déjà créé
+                embed.addField(`Bot `, `${accName} a déjà été ajouté par ${data.username}.`)
+            }   
+        }else { // Cas où le compte n'a pas été créé
             const compteExiste = await client.accountExist(accName,message.guild);
-            if (compteExiste) {
+            if (compteExiste) { //On l'ajoute si et seulement si il existe
                 await client.createAccount({
                     username: message.member.user.tag,
                     name: accName,
