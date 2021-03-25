@@ -40,7 +40,7 @@ module.exports.run = async (client,message,args) => {
                     {name:'Nombre de WAX: ', value : acc.nbWAX, inline: true},
                     {name:'Nombre de TLM: ', value : acc.nbTLM, inline: true},
                     {name:'Nombre de TLM: ', value : acc.nbTLM, inline: true},
-                    {name: 'Shitlisted: ', value: acc.isShitListed, inline: true},
+                    {name: 'ShitListed: ', value: acc.isShitListed, inline: true},
                 )
                 .setColor("#006699")
                 .setTimestamp();
