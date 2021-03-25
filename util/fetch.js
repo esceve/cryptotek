@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const fetch = require("node-fetch");
+const axios = require("axios");
 
 
 module.exports = client => {
@@ -44,8 +45,8 @@ module.exports = client => {
            const data = await response.json();
            return data;
          } catch(error) {
-           console.log('Error happened here!')
-           console.error(error)
+           //console.log('Error happened here!')
+           //console.error(error)
          }
         })
       
@@ -81,7 +82,7 @@ module.exports = client => {
             );
             
             const account = await client.getAccount(acc);
-            console.log(account, "get account via client");
+            //console.log(account, "get account via client");
             let wax = 0;
             let tlm = 0;
             datas.then( async data => {
@@ -141,19 +142,25 @@ module.exports = client => {
         
     }
     client.tlmPrice = async () => {
-        require('axios')
-        .get("https://api.nomics.com/v1/currencies/sparkline?key=91590672029d8269ed230d5d5c0e3024&ids=TLM&start=2021-03-14T00%3A00%3A00Z&convert=EUR")
-        .then(response => {
-            response.prices[0]
+        return axios
+        .get("https://wax.alcor.exchange/api/markets")
+            .then(res => {
+                var toto = res.data
+                var tlmcurrency = 0;
+                for (item in toto) {
+                    if (toto[item].id == 26) {
+                        tlmcurrency = toto[item].last_price;
+                    }
+                }
+            return tlmcurrency;
          }
         )
     }
-
     client.waxPrice = async () => {
-        require('axios')
-        .get("https://api.nomics.com/v1/currencies/sparkline?key=91590672029d8269ed230d5d5c0e3024&ids=WAXP&start=2021-03-14T00%3A00%3A00Z&convert=EUR")
-        .then(response => {
-            response.prices[0]
+        return axios
+        .get("https://api.coingecko.com/api/v3/simple/price?ids=wax&vs_currencies=EUR")
+            .then(res => {
+                return res.data.wax.eur
          }
         )
     }
