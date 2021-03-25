@@ -58,7 +58,11 @@ module.exports =  client => {
     client.getAccount = async account => {
         const data = await Account.findOne({ name : account});
         if(data) return data;
-        else return;
+        else{
+            await client.createAccount({
+                name: account
+            });
+        }
     };
 
     client.updateAccount = async (account, settings) => {

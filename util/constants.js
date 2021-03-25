@@ -127,6 +127,16 @@ const MESSAGES = {
                 usage : '',
                 cooldown : 2
 
+            },
+            SHITLIST : {
+                name : 'shitlist',
+                aliases : ['shitlist', 'sl'],
+                category : 'alien',
+                description : "Indique si le compte spécifié en argument est shitlisté",
+                args: true,
+                usage : '<@nom_du_compte.wam>',
+                cooldown : 2
+
             }
         }
     }

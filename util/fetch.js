@@ -52,7 +52,6 @@ module.exports = client => {
     }
 
     client.updateBalance = async (acc,guild) => {
-        console.log(acc, "account enter in updateBalance");
         const datas = client.queryFetch(
             `
             query($account: String!, $limit: Uint32, $opts: [ACCOUNT_BALANCE_OPTION!]) {
@@ -81,7 +80,6 @@ module.exports = client => {
             );
             
             const account = await client.getAccount(acc);
-            console.log(account, "get account via client");
             let wax = 0;
             let tlm = 0;
             datas.then( async data => {
@@ -140,22 +138,21 @@ module.exports = client => {
         return exist;
         
     }
-    client.tlmPrice = async () => {
-        require('axios')
-        .get("https://api.nomics.com/v1/currencies/sparkline?key=91590672029d8269ed230d5d5c0e3024&ids=TLM&start=2021-03-14T00%3A00%3A00Z&convert=EUR")
-        .then(response => {
-            response.prices[0]
-         }
-        )
-    }
 
-    client.waxPrice = async () => {
-        require('axios')
-        .get("https://api.nomics.com/v1/currencies/sparkline?key=91590672029d8269ed230d5d5c0e3024&ids=WAXP&start=2021-03-14T00%3A00%3A00Z&convert=EUR")
-        .then(response => {
-            response.prices[0]
-         }
-        )
-    }
+    client.isShitListed = async (accName) =>{
+
+        let url = `https://wax.pink.gg/v2/history/get_actions?account=${accName}&skip=0&limit=1&sort=desc&transfer.to=${accName}`
+        await fetch(url)
+            .then(res => res.json())
+            .then(async json => {
+                    let data = json.actions[0].act.data;
+                    if (data.memo == "ALIEN WORLDS - Mined Trilium"){
+                        if(parseFloat(data.quantity.split(' ')[0]) <= 0.00999){
+                            await client.updateAccount(accName, { isShitListed : true});
+                        }
+                    }
+            })
+        
+      }
     
 };

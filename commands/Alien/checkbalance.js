@@ -24,9 +24,6 @@ module.exports.run = async (client,message,args) => {
                         .setColor("#006699");
                 }
             }
-            let nbWaxEUR = parseInt(await client.waxPrice());
-            let nbTlmEUR = parseInt(await client.waxPrice());
-            embed.addField(`Total: `,`Nombre de WAX : ${nbWax}\nNombre de TLM : ${nbTlm}\n ${nbWaxEUR + nbTlmEUR} EUR`)
             message.channel.send(embed);
         }else {
             client.updateBalance(args[0],message.guild);
