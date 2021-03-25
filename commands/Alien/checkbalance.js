@@ -22,7 +22,7 @@ module.exports.run = async (client,message,args) => {
                     nbWax += parseFloat(acc.nbWAX);
                     nbTlm += parseFloat(acc.nbTLM);
                     embed
-                        .addField(`${acc.name}`,`Shitlisted: ${acc.isShitListed ? "OUI" : "NON"}\nNombre de WAX: ${acc.nbWAX} WAX\nNombre de TLM: ${acc.nbTLM} TLM`)
+                        .addField(`${acc.name}`,`Shitlisted: ${acc.isShitListed ? "OUI" : "NON"}\nNombre de WAX: ${acc.nbWAX}\nNombre de TLM: ${acc.nbTLM}`)
                         .setColor("#006699");
                 }
             }
@@ -31,7 +31,7 @@ module.exports.run = async (client,message,args) => {
             var tlmToWax = nbTlm * nbTlmEUR;
             var totalWax = tlmToWax + nbWax;
             var WaxToEur = totalWax * nbWaxEUR;
-            embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm}\nConversion: ${WaxToEur} EUR`)
+            embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
             message.channel.send(embed);
         }else {
             client.updateBalance(args[0],message.guild);
@@ -48,7 +48,7 @@ module.exports.run = async (client,message,args) => {
             const embed = new MessageEmbed()
                 .setAuthor(`${message.member.displayName} (${acc.name})`,message.member.user.displayAvatarURL())
                 .addFields(
-                    {name:'Nombre de WAX: ', value : `${acc.nbWAX} WAX`},
+                    {name:'Nombre de WAX: ', value : `${acc.nbWAX}`},
                     {name:'Nombre de TLM: ', value : `${acc.nbTLM}`},
                     {name: 'ShitListed: ', value: acc.isShitListed ? "Oui" : "Non"},
                     {name: "Conversion EUR", value:  `${WaxToEur} EUR`}
