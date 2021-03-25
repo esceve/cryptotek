@@ -31,7 +31,7 @@ module.exports.run = async (client,message,args) => {
             var tlmToWax = nbTlm * nbTlmEUR;
             var totalWax = tlmToWax + nbWax;
             var WaxToEur = totalWax * nbWaxEUR;
-            embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
+            embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm}\nConversion: ${WaxToEur} EUR`)
             message.channel.send(embed);
         }else {
             client.updateBalance(args[0],message.guild);
