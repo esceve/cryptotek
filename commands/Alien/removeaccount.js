@@ -27,7 +27,7 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
         let acc = dbUser.accounts;
         acc.splice(acc.indexOf(accName),1);
         await client.updateUser(message.member.user, {accounts: acc});
-        await client.deleteAccount(accName);
+        await client.deleteAccount(accName,message.guild);
         const embed = new MessageEmbed()
         .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
         .setDescription(`Le compte ${accName} a bien été supprimé.`)

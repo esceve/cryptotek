@@ -63,6 +63,15 @@ const MESSAGES = {
                 args: false,
                 usage: '',
                 cooldown: 2
+            },
+            LEADERBOARD: {
+                name: 'leaderboard',
+                aliases: ['leaderboard', 'lb'],
+                category: 'misc',
+                description: "Donne le tableau des score de tout les membres",
+                args: false,
+                usage: '',
+                cooldown: 2
             }
         },
         ADMIN : {

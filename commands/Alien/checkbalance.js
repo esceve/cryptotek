@@ -16,9 +16,9 @@ module.exports.run = async (client,message,args) => {
                 .setColor("#dc5500")
             }else {
                 for(const accName of user.accounts){
-                    setTimeout(() => client.updateBalance(accName, message.guild), 500)
-                    let acc = await client.getAccount(accName);
                     await client.isShitListed(accName);
+                    let acc = await client.getAccount(accName);
+                    setTimeout(() => client.updateBalance(accName, message.guild), 500)
                     nbWax += parseFloat(acc.nbWAX);
                     nbTlm += parseFloat(acc.nbTLM);
                     embed
@@ -35,8 +35,8 @@ module.exports.run = async (client,message,args) => {
             message.channel.send(embed);
         }else {
             client.updateBalance(args[0],message.guild);
-            let acc = await client.getAccount(args[0])
             await client.isShitListed(args[0]);
+            let acc = await client.getAccount(args[0])
             var nbWax = parseFloat(acc.nbWAX);
             var nbTlm = parseFloat(acc.nbTLM);
 

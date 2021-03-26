@@ -56,26 +56,30 @@ module.exports =  client => {
     };
 
     client.getAccount = async account => {
-        const data = await Account.findOne({ name : account});
-        if(data) return data;
+        let data = await Account.findOne({ name : account});
+        if(data){
+            return data;
+        } 
         else{
             await client.createAccount({
                 name: account
             });
+        data = await Account.findOne({ name : account});
+        return data;
         }
     };
 
     client.updateAccount = async (account, settings) => {
         let data = await client.getAccount(account);
         if (typeof data !== "object") data ={};
-        for (const key in settings){
+        for (const key in settings) {
             if(data[key] !== settings[key]) data[key] = settings[key];
         }
         return data.updateOne(settings);
     };
 
-    client.deleteAccount = async account => {
-        let data = await client.getAccount(account);
+    client.deleteAccount = async (account) => {
+        let data = await client.getAccount(account)
         return data.deleteOne();
     };
 };

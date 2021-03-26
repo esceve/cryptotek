@@ -8,11 +8,14 @@ module.exports = async (client,member) => {
     // .setTimestamp();
 
     // client.channels.cache.get('822529856381649005').send(embed);
+    const user = await User.findOne({username : member.user.tag})
+    if(!user){
+        await client.createUser({
+            guildID : member.guild.id,
+            guildName : member.guild.name,
+            userID : member.id,
+            username : member.user.tag,
+        });
+    }
 
-    await client.createUser({
-        guildID : member.guild.id,
-        guildName : member.guild.name,
-        userID : member.id,
-        username : member.user.tag,
-    });
 }

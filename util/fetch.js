@@ -79,8 +79,7 @@ module.exports = client => {
                 "limit": 10
             },guild
             );
-            
-            const account = await client.getAccount(acc);
+            await client.getAccount(acc)
             let wax = 0;
             let tlm = 0;
             datas.then( async data => {
@@ -96,8 +95,8 @@ module.exports = client => {
                                 break;
                     }
                 }
-            await client.updateAccount(account.name, { nbWAX : wax});
-            await client.updateAccount(account.name, { nbTLM : tlm});
+            await client.updateAccount(acc, { nbWAX : wax});
+            await client.updateAccount(acc, { nbTLM : tlm});
 
             })
         
@@ -144,14 +143,14 @@ module.exports = client => {
         return axios
         .get("https://wax.alcor.exchange/api/markets")
             .then(res => {
-                var toto = res.data
-                var tlmcurrency = 0;
-                for (item in toto) {
-                    if (toto[item].id == 26) {
-                        tlmcurrency = toto[item].last_price;
+                var currencies = res.data
+                var tlmCurrencies = 0;
+                for (item in currencies) {
+                    if (currencies[item].id == 26) {
+                        tlmCurrencies = currencies[item].last_price;
                     }
                 }
-            return tlmcurrency;
+            return tlmCurrencies;
          }
         )
     }
@@ -164,7 +163,7 @@ module.exports = client => {
         )
     }
 
-    client.isShitListed = async (accName) =>{
+    client.isShitListed = async accName=>{
 
         let url = `https://wax.pink.gg/v2/history/get_actions?account=${accName}&skip=0&limit=1&sort=desc&transfer.to=${accName}`
         await fetch(url)
