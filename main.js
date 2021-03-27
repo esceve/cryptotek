@@ -20,8 +20,8 @@ bot.mongoose.init();
 
  setInterval( async () =>{
     await bot.showLastNFTs()
- },60*7*1000)
+ },420000)
 
  setInterval( async () =>{
    await bot.updateShitlist()
-},3600*1000*4)
+},10800000)

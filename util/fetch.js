@@ -186,8 +186,10 @@ module.exports = client => {
         const nft = await fetch(url)
             .then(res => res.json())
             .then(async json => {
-                if (!json.data.length)
+                if (!json.data.length){
                     return;
+                }
+                    
                 const data = json.data[0].data;
                 if ( (json.data[0].collection.created_at_time > Date.now() - 300000) && (data.rarity === "Rare" || data.rarity === "Epic" || data.rarity ===  "Legendary" || data.rarity ===  "Mythical")) {
                     const price = await client.getNFTPrice(json.data[0].asset_id)
@@ -202,7 +204,6 @@ module.exports = client => {
                     }
                     return nft;
                 }
-                return undefined;
         })
         return nft;
       }
@@ -226,54 +227,53 @@ module.exports = client => {
           for(const user in users){
             for(const accName of users[user].accounts){
                 let nft = await client.getLastNFT(accName)
-                if (nft) {
-                    let member = await client.guilds.fetch(`${users[user].guildID}`)
-                        .then(guild => guild.members.fetch(`${users[user].userID}`))
-                    let discordUser = member.user;
-                    let date = new Date(nft.created_at_time * 1000)
-                    let embed = new MessageEmbed()
-                        .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
-                        .setTitle(nft.name)
-                        .setImage(nft.img)
-                        .setTimestamp(nft.created_at_time)
-                        .addField(`Prix : `, `Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
-                        .addField(`Date: `, `NFT drop le : ${date}`)
-                        .addField('Par : ', `${discordUser.username} avec le compte ${accName}`)
-                    
-                    switch (nft.rarity) {
-                        case 'Rare':
-                            embed
-                                .setColor("#3998d8")
-                            client.channels.cache.get('824559024720183296').send(embed);
-                            client.users.cache.get(users[user].userID).send(embed);
-                            break;
-                        case 'Epic':
-                            embed
-                                .setColor("#6d247d")
-                            client.channels.cache.get('824559024720183296').send(embed);
-                            client.users.cache.get(users[user].userID).send(embed);
-                            break;
-    
-                        case 'Legendary':
-                            embed
-                                .setColor("#b47c00")
-                            client.channels.cache.get('824559024720183296').send(embed);
-                            client.users.cache.get(users[user].userID).send(embed);
-                            break;
-    
-                        case 'Mythical':
-                            embed
-                                .setColor("#bd2b2b")
-                            client.channels.cache.get('824559024720183296').send(embed);
-                            client.users.cache.get(users[user].userID).send(embed);
-                            break;
-                        default:
-                            break;
-                    }
+                if(!nft) return;
+                let member = await client.guilds.fetch(`${users[user].guildID}`)
+                    .then(guild => guild.members.fetch(`${users[user].userID}`))
+                let discordUser = member.user;
+                let date = new Date(nft.created_at_time * 1000)
+                let embed = new MessageEmbed()
+                    .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
+                    .setTitle(nft.name)
+                    .setImage(nft.img)
+                    .setTimestamp(nft.created_at_time)
+                    .addField(`Prix : `, `Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
+                    .addField(`Date: `, `NFT drop le : ${date}`)
+                    .addField('Par : ', `${discordUser.username} avec le compte ${accName}`)
+                
+                switch (nft.rarity) {
+                    case 'Rare':
+                        embed
+                            .setColor("#3998d8")
+                        client.channels.cache.get('824559024720183296').send(embed);
+                        client.users.cache.get(users[user].userID).send(embed);
+                        break;
+                    case 'Epic':
+                        embed
+                            .setColor("#6d247d")
+                        client.channels.cache.get('824559024720183296').send(embed);
+                        client.users.cache.get(users[user].userID).send(embed);
+                        break;
+
+                    case 'Legendary':
+                        embed
+                            .setColor("#b47c00")
+                        client.channels.cache.get('824559024720183296').send(embed);
+                        client.users.cache.get(users[user].userID).send(embed);
+                        break;
+
+                    case 'Mythical':
+                        embed
+                            .setColor("#bd2b2b")
+                        client.channels.cache.get('824559024720183296').send(embed);
+                        client.users.cache.get(users[user].userID).send(embed);
+                        break;
+                    default:
+                        break;
                 }
             }
-            }
           }
+      }
 
         client.updateShitlist = async () =>{
             const users = await User.find({});  
@@ -297,6 +297,7 @@ module.exports = client => {
                     let embed = new MessageEmbed()
                             .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
                             .setTitle(':warning: Vos comptes ont été shitlistés :warning:')
+                            .setDescription('Veuillez supprimer ces comptes de la base de données pour ne pas recevoir ce message de nouveau')
                             .setTimestamp()
                     for(const userAcc of userAccounts){
                         embed
