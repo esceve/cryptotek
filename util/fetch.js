@@ -224,7 +224,6 @@ module.exports = client => {
           const users = await User.find({});  
           for(const user in users){
             for(const accName of users[user].accounts){
-                console.log("User ", users[user].username, "compte wax", accName)
                 let nft = await client.getLastNFT(accName)
                 if (nft) {
                     let member = await client.guilds.fetch(`${users[user].guildID}`)
@@ -238,6 +237,7 @@ module.exports = client => {
                         .setTimestamp(nft.created_at_time)
                         .addField(`Prix : `, `Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
                         .addField(`Date: `, `NFT drop le : ${date}`)
+                        .addField('Par : ', `${discordUser.username} avec le compte ${accName}`)
                     
                     switch (nft.rarity) {
                         case 'Rare':
@@ -273,30 +273,36 @@ module.exports = client => {
             }
             }
           }
-          
+
         client.updateShitlist = async () =>{
             const users = await User.find({});  
             for(const user in users){
                 let userAccounts = []
+                console.log(`${users[user].username}`)
                 for(const accName of users[user].accounts){
+                    
                     await client.isShitListed(accName)
                     const acc = await client.getAccount(accName)
                     if (acc.isShitListed) {
-                        userAccounts.push(acc.name)                         
+                        userAccounts.push(acc.name)
+                        console.log('bite')                         
                     }
                 }
-                let member = await client.guilds.fetch(`${users[user].guildID}`)
-                          .then(guild => guild.members.fetch(`${users[user].userID}`))
-                let discordUser = member.user;
-                let embed = new MessageEmbed()
-                        .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
-                        .setTitle(':warning: Vos comptes ont été shitlistés :warning:')
-                        .setTimestamp()
-                for(const userAcc of userAccounts){
-                    embed
-                        .addField(`${userAcc} : `, `:x:`)
+                if(userAccounts.length){
+                    let member = await client.guilds.fetch(`${users[user].guildID}`)
+                            .then(guild => guild.members.fetch(`${users[user].userID}`))
+                    let discordUser = member.user;
+                    let embed = new MessageEmbed()
+                            .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
+                            .setTitle(':warning: Vos comptes ont été shitlistés :warning:')
+                            .setTimestamp()
+                    for(const userAcc of userAccounts){
+                        embed
+                            .addField(`${userAcc} : `, `:x:`)
+                    }
+                    client.users.cache.get(`${users[user].userID}`).send(embed);
                 }
-                client.users.cache.get(discordUser.id).send(embed);
+                
             }
         }
 

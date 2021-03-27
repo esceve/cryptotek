@@ -146,6 +146,16 @@ const MESSAGES = {
                 cooldown : 2
 
             },
+            UPDATESHITLIST : {
+                name : 'updateshitlist',
+                aliases : ['updateshitlist','upshit'],
+                category : 'alien',
+                description : "Update la shitlist est envoit un mp aux utilisateur qui ont des comptes shitlistés",
+                args: false,
+                usage : '',
+                cooldown : 2
+
+            },
             SHITLIST : {
                 name : 'shitlist',
                 aliases : ['shitlist', 'sl'],

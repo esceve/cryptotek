@@ -2,7 +2,7 @@ const {Collection } = require("discord.js");
 
 
 module.exports = async (bot,message) => {
-    // if(message.channel.type === "dm") return client.emit('directMessage',message);
+    if(message.channel.type === "dm") return;
     const settings = await bot.getGuild(message.guild);
     let dbUser = await bot.getUser(message.member);
     if(message.author.bot) return;

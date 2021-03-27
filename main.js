@@ -24,4 +24,4 @@ bot.mongoose.init();
 
  setInterval( async () =>{
    await bot.updateShitlist()
-},10000)
+},3600*1000)

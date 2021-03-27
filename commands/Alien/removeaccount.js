@@ -2,41 +2,32 @@ const { MESSAGES } = require("../../util/constants");
 const {MessageEmbed} = require("discord.js");
 
 module.exports.run = async (client,message,args,settings,dbUser) => {
-    const accName = args[0];
-    let data = await client.getAccount(accName);
-    if(!data){
-        const embed = new MessageEmbed()
-        .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
-        .setDescription(`Le compte ${accName} n'existe pas ou a déjà été supprimé de la base de données.`)
-        .setColor("#dc0000")
-        .setFooter("Le compte n'est pas présent dans la DB.")
-        .setTimestamp();
-        message.channel.send(embed);
-        return;
-    } else if (!dbUser.accounts.includes(accName)){
-        const embed = new MessageEmbed()
-        .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
-        .setDescription(`Vous ne pouvez pas supprimer un compte qui ne vous appartient pas.`)
-        .setColor("#dc0000")
-        .setFooter("Ce compte appartient à quelqu'un d'autre.")
-        .setTimestamp();
-        message.channel.send(embed);
-        return;
-    }else {
+    let embed = new MessageEmbed()
+            .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
+            .setTimestamp()
+            .setColor("#dc0000");
+    for(const accName of args){
+        let data = await client.getAccount(accName);
+        if(!data){
+            embed
+            .addField(`${accName}`,`Le compte n'existe pas ou a déjà été supprimé de la base de données.    :x:`)
 
-        let acc = dbUser.accounts;
-        acc.splice(acc.indexOf(accName),1);
-        await client.updateUser(message.member.user, {accounts: acc});
-        await client.deleteAccount(accName,message.guild);
-        const embed = new MessageEmbed()
-        .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
-        .setDescription(`Le compte ${accName} a bien été supprimé.`)
-        .setColor("#92f000")
-        .setFooter("Ce compte a été supprimé avec succès")
-        .setTimestamp();
-        message.channel.send(embed);
+            .setFooter("Le compte n'est pas présent dans la DB.")
+
+        } else if (!dbUser.accounts.includes(accName)){
+            embed
+            .addField(`${accName}`,`Vous ne pouvez pas supprimer un compte qui ne vous appartient pas. :x:`)
+        }else {
+
+            let acc = dbUser.accounts;
+            acc.splice(acc.indexOf(accName),1);
+            await client.updateUser(message.member.user, {accounts: acc});
+            await client.deleteAccount(accName,message.guild);
+            embed
+            .addField(`${accName}`,`Le compte ${accName} a bien été supprimé. :white_check_mark: `)
+        }
     }
-    
+    message.channel.send(embed);
 };
 
 module.exports.help = MESSAGES.COMMANDS.ALIEN.REMOVEACCOUNT;
