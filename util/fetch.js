@@ -180,26 +180,30 @@ module.exports = client => {
       }
       client.getLastNFT = async accName=>{
 
-        let url = `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${accName}&page=1&limit=1&order=desc&sort=asset_id`
+        let url = `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${accName}&page=1&limit=1&order=desc&sort=updated`
         
         const nft = await fetch(url)
             .then(res => res.json())
             .then(async json => {
-                if(!json.data.length) return;
-                    const data = json.data[0].data;
+                if (!json.data.length)
+                    return;
+                const data = json.data[0].data;
+                if ( (json.data[0].collection.created_at_time > Date.now() - 300000) && (data.rarity === "Rare" || data.rarity === "Epic" || data.rarity ===  "Legendary" || data.rarity ===  "Mythical")) {
+                    console.log("im here");
                     const price = await client.getNFTPrice(json.data[0].asset_id)
                     let nft = {
-                        id : json.data[0].asset_id,
-                        created_at_time : json.data[0].collection.created_at_time,
-                        name : data.name,
-                        description : data.description,
-                        rarity : data.rarity,
-                        img : `https://cloudflare-ipfs.com/ipfs/${data.img}`,
-                        avg_price : `${price.avg_eur} EUR`,
-                        last_sold_eur : `${price.last_sold_eur} EUR`
+                        id: json.data[0].asset_id,
+                        created_at_time: json.data[0].collection.created_at_time,
+                        name: data.name,
+                        rarity: data.rarity,
+                        img: `https://cloudflare-ipfs.com/ipfs/${data.img}`,
+                        avg_price: `${price.avg_eur} EUR`,
+                        last_sold_eur: `${price.last_sold_eur} EUR`
                     }
                     return nft;
-            })
+                }
+                return undefined;
+        })
         return nft;
       }
       client.getNFTPrice = async nftid => {
@@ -207,6 +211,7 @@ module.exports = client => {
         const price = await fetch(url)
             .then(res => res.json())
             .then(async json => {
+                console.log("im here 2");
                 let waxeur = await client.waxPrice();
                 let prices = {
                     avg_eur : parseFloat(json.average)*waxeur,
@@ -220,50 +225,49 @@ module.exports = client => {
           const users = await User.find({});  
           for(const user in users){
             for(const accName of users[user].accounts){
-                console.log(accName)
+                console.log("User ", users[user].username, "compte wax", accName)
                 let nft = await client.getLastNFT(accName)
-                if(!nft)return;
-                let member = await client.guilds.fetch(`${users[user].guildID}`)
-                    .then(guild => guild.members.fetch(`${users[user].userID}`) )
-                let user = member.user;
-                let date = new Date(nft.created_at_time*1000)
-                let embed = new MessageEmbed()
-                    .setAuthor(`${user.username}`,`${user.displayAvatarURL()}`)
-                    .setTitle(nft.name)
-                    .setImage(nft.img)
-                    .setTimestamp(nft.created_at_time)
-                    .setDescription(nft.description)
-                    .addField(`Prix : `,`Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
-                    .addField(`${user}: `,`NFT drop le : ${date}`)
-                if(nft.created_at_time > Date.now() - 600000){ //50000 < 55000-
-                    switch(nft.rarity){
+                if (nft) {
+                    let member = await client.guilds.fetch(`${users[user].guildID}`)
+                        .then(guild => guild.members.fetch(`${users[user].userID}`))
+                    let discordUser = member.user;
+                    let date = new Date(nft.created_at_time * 1000)
+                    let embed = new MessageEmbed()
+                        .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
+                        .setTitle(nft.name)
+                        .setImage(nft.img)
+                        .setTimestamp(nft.created_at_time)
+                        .addField(`Prix : `, `Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
+                        .addField(`${discordUser}: `, `NFT drop le : ${date}`)
+                    console.log(nft.created_at_time, Date.now() - 600000);
+                    
+                    switch (nft.rarity) {
                         case 'Rare':
                             embed
                                 .setColor("#3998d8")
                             client.channels.cache.get('824559024720183296').send(embed);
-                        break;
+                            break;
                         case 'Epic':
                             embed
                                 .setColor("#6d247d")
                             client.channels.cache.get('824559024720183296').send(embed);
-                        break;
-        
+                            break;
+    
                         case 'Legendary':
                             embed
                                 .setColor("#b47c00")
                             client.channels.cache.get('824559024720183296').send(embed);
-                        break;
-        
+                            break;
+    
                         case 'Mythical':
                             embed
                                 .setColor("#bd2b2b")
                             client.channels.cache.get('824559024720183296').send(embed);
-                        break;
+                            break;
                         default:
                             break;
                     }
                 }
-                
             }
             }
             //let acc = accounts[account]

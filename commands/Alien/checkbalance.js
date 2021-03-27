@@ -22,7 +22,7 @@ module.exports.run = async (client,message,args) => {
                     nbWax += parseFloat(acc.nbWAX);
                     nbTlm += parseFloat(acc.nbTLM);
                     embed
-                        .addField(`${acc.name}`,`Shitlisted: ${acc.isShitListed ? "OUI" : "NON"}\nNombre de WAX: ${acc.nbWAX}\nNombre de TLM: ${acc.nbTLM}`)
+                        .addField(`${acc.name}`,`Fonctionne: ${acc.isShitListed ? ":x:" : ":white_check_mark:"}\nNombre de WAX: ${acc.nbWAX}\nNombre de TLM: ${acc.nbTLM}`)
                         .setColor("#006699");
                 }
             }
@@ -50,10 +50,10 @@ module.exports.run = async (client,message,args) => {
                 .addFields(
                     {name:'Nombre de WAX: ', value : `${acc.nbWAX}`},
                     {name:'Nombre de TLM: ', value : `${acc.nbTLM}`},
-                    {name: 'ShitListed: ', value: acc.isShitListed ? "Oui" : "Non"},
+                    {name: 'Fonctionne: ', value: acc.isShitListed ? ":x:" : ":white_check_mark:"},
                     {name: "Conversion EUR", value:  `${WaxToEur} EUR`}
                 )
-                .setColor(acc.isShitListed ? "#ff0000" : "#006699")
+                .setColor(acc.isShitListed ? "#990000" : "#009922")
                 .setTimestamp();
                 message.channel.send(embed);
         }

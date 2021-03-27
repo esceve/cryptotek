@@ -155,6 +155,15 @@ const MESSAGES = {
                 usage : '<@nom_du_compte.wam>',
                 cooldown : 2
 
+            },
+            NFTSHOW: {
+                name: 'ntfshow',
+                aliases: ['nftshow', 'ns'],
+                category: 'alien',
+                description: 'Affiche le dernier nft rare trouvai',
+                args: false,
+                usage: '',
+                cooldown: 2
             }
         }
     }
