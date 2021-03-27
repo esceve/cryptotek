@@ -29,4 +29,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: whoami
+          script: cd /home/pi/cryptotek;
+                  pm2 stop main.js -l log.log
+                  rm -rf node_modules
+                  git pull origin main
+                  npm install
+                  pm2 start main.js
