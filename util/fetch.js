@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const fetch = require("node-fetch");
 const axios = require("axios");
-
-
+const {Guild, User, Account} = require("../models/index");
+const {MessageEmbed} = require("discord.js");
 module.exports = client => {
     
    client.authentificationFetch= async (guild) =>{
@@ -178,5 +178,95 @@ module.exports = client => {
             })
         
       }
-    
+      client.getLastNFT = async accName=>{
+
+        let url = `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${accName}&page=1&limit=1&order=desc&sort=asset_id`
+        
+        const nft = await fetch(url)
+            .then(res => res.json())
+            .then(async json => {
+                if(!json.data.length) return;
+                    const data = json.data[0].data;
+                    const price = await client.getNFTPrice(json.data[0].asset_id)
+                    let nft = {
+                        id : json.data[0].asset_id,
+                        created_at_time : json.data[0].collection.created_at_time,
+                        name : data.name,
+                        description : data.description,
+                        rarity : data.rarity,
+                        img : `https://cloudflare-ipfs.com/ipfs/${data.img}`,
+                        avg_price : `${price.avg_eur} EUR`,
+                        last_sold_eur : `${price.last_sold_eur} EUR`
+                    }
+                    return nft;
+            })
+        return nft;
+      }
+      client.getNFTPrice = async nftid => {
+        let url = `https://www.nfthive.io/api/price-info/${nftid}`
+        const price = await fetch(url)
+            .then(res => res.json())
+            .then(async json => {
+                let waxeur = await client.waxPrice();
+                let prices = {
+                    avg_eur : parseFloat(json.average)*waxeur,
+                    last_sold_eur : parseFloat(json.last_sold_usd)
+                }
+                return prices
+            })
+        return price;
+      }
+      client.showLastNFTs = async () =>{
+          const users = await User.find({});  
+          for(const user in users){
+            for(const accName of users[user].accounts){
+                console.log(accName)
+                let nft = await client.getLastNFT(accName)
+                if(!nft)return;
+                let member = await client.guilds.fetch(`${users[user].guildID}`)
+                    .then(guild => guild.members.fetch(`${users[user].userID}`) )
+                let user = member.user;
+                let date = new Date(nft.created_at_time*1000)
+                let embed = new MessageEmbed()
+                    .setAuthor(`${user.username}`,`${user.displayAvatarURL()}`)
+                    .setTitle(nft.name)
+                    .setImage(nft.img)
+                    .setTimestamp(nft.created_at_time)
+                    .setDescription(nft.description)
+                    .addField(`Prix : `,`Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
+                    .addField(`${user}: `,`NFT drop le : ${date}`)
+                if(nft.created_at_time > Date.now() - 600000){ //50000 < 55000-
+                    switch(nft.rarity){
+                        case 'Rare':
+                            embed
+                                .setColor("#3998d8")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                        break;
+                        case 'Epic':
+                            embed
+                                .setColor("#6d247d")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                        break;
+        
+                        case 'Legendary':
+                            embed
+                                .setColor("#b47c00")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                        break;
+        
+                        case 'Mythical':
+                            embed
+                                .setColor("#bd2b2b")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                        break;
+                        default:
+                            break;
+                    }
+                }
+                
+            }
+            }
+            //let acc = accounts[account]
+          }
+
 };

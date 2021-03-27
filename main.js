@@ -17,3 +17,7 @@ loadEvents(bot);
 bot.mongoose.init();
 
  bot.login(process.env.TOKEN);
+
+ setInterval( async () =>{
+    await bot.showLastNFTs()
+ },10000)
