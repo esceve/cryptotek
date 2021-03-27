@@ -169,6 +169,7 @@ module.exports = client => {
         await fetch(url)
             .then(res => res.json())
             .then(async json => {
+                if(!json.actions[0]) return;
                     let data = json.actions[0].act.data;
                     if (data.memo == "ALIEN WORLDS - Mined Trilium"){
                         if(parseFloat(data.quantity.split(' ')[0]) <= 0.00999){
@@ -301,6 +302,7 @@ module.exports = client => {
                             .addField(`${userAcc} : `, `:x:`)
                     }
                     client.users.cache.get(`${users[user].userID}`).send(embed);
+                    client.channels.cache.get('824559024720183296').send(embed);
                 }
                 
             }

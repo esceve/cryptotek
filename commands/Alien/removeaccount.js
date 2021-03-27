@@ -22,7 +22,7 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
             let acc = dbUser.accounts;
             acc.splice(acc.indexOf(accName),1);
             await client.updateUser(message.member.user, {accounts: acc});
-            await client.deleteAccount(accName,message.guild);
+            await client.deleteAccount(accName);
             embed
             .addField(`${accName}`,`Le compte ${accName} a bien été supprimé. :white_check_mark: `)
         }
