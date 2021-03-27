@@ -189,7 +189,6 @@ module.exports = client => {
                     return;
                 const data = json.data[0].data;
                 if ( (json.data[0].collection.created_at_time > Date.now() - 300000) && (data.rarity === "Rare" || data.rarity === "Epic" || data.rarity ===  "Legendary" || data.rarity ===  "Mythical")) {
-                    console.log("im here");
                     const price = await client.getNFTPrice(json.data[0].asset_id)
                     let nft = {
                         id: json.data[0].asset_id,
@@ -238,31 +237,34 @@ module.exports = client => {
                         .setImage(nft.img)
                         .setTimestamp(nft.created_at_time)
                         .addField(`Prix : `, `Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
-                        .addField(`${discordUser}: `, `NFT drop le : ${date}`)
-                    console.log(nft.created_at_time, Date.now() - 600000);
+                        .addField(`Date: `, `NFT drop le : ${date}`)
                     
                     switch (nft.rarity) {
                         case 'Rare':
                             embed
                                 .setColor("#3998d8")
                             client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
                             break;
                         case 'Epic':
                             embed
                                 .setColor("#6d247d")
                             client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
                             break;
     
                         case 'Legendary':
                             embed
                                 .setColor("#b47c00")
                             client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
                             break;
     
                         case 'Mythical':
                             embed
                                 .setColor("#bd2b2b")
                             client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
                             break;
                         default:
                             break;
@@ -270,7 +272,32 @@ module.exports = client => {
                 }
             }
             }
-            //let acc = accounts[account]
           }
+          
+        client.updateShitlist = async () =>{
+            const users = await User.find({});  
+            for(const user in users){
+                let userAccounts = []
+                for(const accName of users[user].accounts){
+                    await client.isShitListed(accName)
+                    const acc = await client.getAccount(accName)
+                    if (acc.isShitListed) {
+                        userAccounts.push(acc.name)                         
+                    }
+                }
+                let member = await client.guilds.fetch(`${users[user].guildID}`)
+                          .then(guild => guild.members.fetch(`${users[user].userID}`))
+                let discordUser = member.user;
+                let embed = new MessageEmbed()
+                        .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
+                        .setTitle(':warning: Vos comptes ont été shitlistés :warning:')
+                        .setTimestamp()
+                for(const userAcc of userAccounts){
+                    embed
+                        .addField(`${userAcc} : `, `:x:`)
+                }
+                client.users.cache.get(discordUser.id).send(embed);
+            }
+        }
 
 };
