@@ -284,9 +284,10 @@ module.exports = client => {
                     
                     await client.isShitListed(accName)
                     const acc = await client.getAccount(accName)
+                    console.log(`${acc.name} est shitlisté : ${acc.isShitListed}`)
                     if (acc.isShitListed) {
                         userAccounts.push(acc.name)
-                        console.log('bite')                         
+                                                 
                     }
                 }
                 if(userAccounts.length){
