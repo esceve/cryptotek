@@ -195,7 +195,7 @@ module.exports = client => {
                 }
                     
                 const data = json.data[0].data;
-                if ( (json.data[0].collection.created_at_time > Date.now() - 300000) && (data.rarity === "Rare" || data.rarity === "Epic" || data.rarity ===  "Legendary" || data.rarity ===  "Mythical")) {
+                if ( (json.data[0].collection.created_at_time > Date.now() - 300000)) {
                     const price = await client.getNFTPrice(json.data[0].asset_id)
                     let nft = {
                         id: json.data[0].asset_id,
@@ -204,7 +204,8 @@ module.exports = client => {
                         rarity: data.rarity,
                         img: `https://cloudflare-ipfs.com/ipfs/${data.img}`,
                         avg_price: `${price.avg_eur} EUR`,
-                        last_sold_eur: `${price.last_sold_eur} EUR`
+                        last_sold_eur: `${price.last_sold_eur} EUR`,
+                        username : accName
                     }
                     return nft;
                 }
@@ -229,54 +230,63 @@ module.exports = client => {
       client.showLastNFTs = async () =>{
           const users = await User.find({});  
           for(const user in users){
+            let userNFTs = []
             for(const accName of users[user].accounts){
-                let nft = await client.getLastNFT(accName)
+                console.log(accName)
+                const nft = await client.getLastNFT(accName)
                 console.log(nft)
                 if(!nft) return;
+                else userNFTs.push(nft)
+            }
+            if(userNFTs.length){
                 let member = await client.guilds.fetch(`${users[user].guildID}`)
                     .then(guild => guild.members.fetch(`${users[user].userID}`))
                 let discordUser = member.user;
-                let date = new Date(nft.created_at_time * 1000)
-                let embed = new MessageEmbed()
-                    .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
-                    .setTitle(nft.name)
-                    .setImage(nft.img)
-                    .setTimestamp(nft.created_at_time)
-                    .addField(`Prix : `, `Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
-                    .addField(`Date: `, `NFT drop le : ${date}`)
-                    .addField('Par : ', `${discordUser.username} avec le compte ${accName}`)
-                
-                switch (nft.rarity) {
-                    case 'Rare':
-                        embed
-                            .setColor("#3998d8")
-                        client.channels.cache.get('824559024720183296').send(embed);
-                        client.users.cache.get(users[user].userID).send(embed);
-                        break;
-                    case 'Epic':
-                        embed
-                            .setColor("#6d247d")
-                        client.channels.cache.get('824559024720183296').send(embed);
-                        client.users.cache.get(users[user].userID).send(embed);
-                        break;
+                for(const nft of userNFTs){
+                    let date = new Date(nft.created_at_time * 1000)
+                    let embed = new MessageEmbed()
+                        .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
+                        .setTitle(nft.name)
+                        .setImage(nft.img)
+                        .setTimestamp(nft.created_at_time)
+                        .addField(`Prix : `, `Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
+                        .addField(`Date: `, `NFT drop le : ${date}`)
+                        .addField('Par : ', `${discordUser.username} avec le compte ${nft.username}`)
+                    
+                    switch (nft.rarity) {
+                        case 'Rare':
+                            embed
+                                .setColor("#3998d8")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
+                            break;
+                        case 'Epic':
+                            embed
+                                .setColor("#6d247d")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
+                            break;
 
-                    case 'Legendary':
-                        embed
-                            .setColor("#b47c00")
-                        client.channels.cache.get('824559024720183296').send(embed);
-                        client.users.cache.get(users[user].userID).send(embed);
-                        break;
+                        case 'Legendary':
+                            embed
+                                .setColor("#b47c00")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
+                            break;
 
-                    case 'Mythical':
-                        embed
-                            .setColor("#bd2b2b")
-                        client.channels.cache.get('824559024720183296').send(embed);
-                        client.users.cache.get(users[user].userID).send(embed);
-                        break;
-                    default:
-                        break;
+                        case 'Mythical':
+                            embed
+                                .setColor("#bd2b2b")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+                
             }
+            
           }
       }
 
