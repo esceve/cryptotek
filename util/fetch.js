@@ -99,7 +99,10 @@ module.exports = client => {
             await client.updateAccount(acc, { nbTLM : tlm});
             
             })
-            return [wax,tlm];
+            let balance = []
+            balance.push(wax)
+            balance.push(tlm)
+            return balance;
     }
     client.accountExist = async (acc,guild) => {
 
