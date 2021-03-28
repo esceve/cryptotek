@@ -82,7 +82,7 @@ module.exports = client => {
             await client.getAccount(acc)
             let wax = 0;
             let tlm = 0;
-            datas.then( async data => {
+            let balance = datas.then( async data => {
                 for(const node of data.data.accountBalances.edges){
                     switch(node.node.symbol){
                         case "WAX" :
@@ -97,12 +97,13 @@ module.exports = client => {
                 }
             await client.updateAccount(acc, { nbWAX : wax});
             await client.updateAccount(acc, { nbTLM : tlm});
-            
-            })
             let balance = []
             balance.push(wax)
             balance.push(tlm)
             return balance;
+            })
+            return balance;
+
     }
     client.accountExist = async (acc,guild) => {
 
