@@ -231,6 +231,7 @@ module.exports = client => {
           for(const user in users){
             for(const accName of users[user].accounts){
                 let nft = await client.getLastNFT(accName)
+                console.log(nft)
                 if(!nft) return;
                 let member = await client.guilds.fetch(`${users[user].guildID}`)
                     .then(guild => guild.members.fetch(`${users[user].userID}`))
