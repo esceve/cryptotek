@@ -53,7 +53,7 @@ module.exports = client => {
     }
 
     client.updateBalance = async (acc,guild) => {
-        const datas = client.queryFetch(
+        const datas = await client.queryFetch(
             `
             query($account: String!, $limit: Uint32, $opts: [ACCOUNT_BALANCE_OPTION!]) {
                 accountBalances(account: $account,limit: $limit, options: $opts) {
@@ -97,9 +97,9 @@ module.exports = client => {
                 }
             await client.updateAccount(acc, { nbWAX : wax});
             await client.updateAccount(acc, { nbTLM : tlm});
-
+            
             })
-        
+            return [wax,tlm];
     }
     client.accountExist = async (acc,guild) => {
 
