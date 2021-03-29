@@ -252,10 +252,10 @@ module.exports = client => {
                         .addField('Par : ', `${discordUser.username} avec le compte ${nft.username}`)
                     
                     switch (nft.rarity) {
-                        // case 'Abundant':
-                        //     break;
-                        // case 'Common':
-                        //     break;    
+                        case 'Abundant':
+                            break;
+                        case 'Common':
+                            break;    
                         case 'Rare':
                             embed
                                 .setColor("#3998d8")
@@ -311,7 +311,7 @@ module.exports = client => {
                                                  
                     }
                 }
-                if(userAccounts.length){
+                if(userAccounts.length == 0) continue;
                     let member = await client.guilds.fetch(`${users[user].guildID}`)
                             .then(guild => guild.members.fetch(`${users[user].userID}`))
                     let discordUser = member.user;
@@ -326,7 +326,7 @@ module.exports = client => {
                     }
                     client.users.cache.get(`${users[user].userID}`).send(embed);
                     client.channels.cache.get('824559024720183296').send(embed);
-                }
+                
                 
             }
         }
