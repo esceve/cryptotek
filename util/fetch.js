@@ -211,6 +211,7 @@ module.exports = client => {
                     return nft;
                 }
         })
+        console.log(`NFT dans getLastNFT ${nft}`)
         return nft;
       }
       client.getNFTPrice = async nftid => {
@@ -329,7 +330,9 @@ module.exports = client => {
         client.showLastNFTs2 = async () =>{
            const accounts = await Account.find({});
            for(const acc in accounts){
+               console.log(`Nom du compte : ${accounts[acc].name}`)
                const nft = await client.getLastNFT(accounts[acc].name)
+               console.log(`NFT dans showLastNFTs2 ${nft}`)
                let date = new Date(nft.created_at_time * 1000)
                let embed = new MessageEmbed()
                    .setAuthor(`${accounts[acc].username}`, ` `)
@@ -339,7 +342,7 @@ module.exports = client => {
                    .addField(`Prix : `, `Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
                    .addField(`Date: `, `NFT drop le : ${date}`)
                    .addField('Par : ', `${accounts[acc].username} avec le compte ${nft.username}`)
-               
+               console.log(`Rareté du NFT : ${nft.rarity}`)
                switch (nft.rarity) {
                     case 'Abundant':
                     embed
