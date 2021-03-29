@@ -233,7 +233,7 @@ module.exports = client => {
             for(const accName of users[user].accounts){
                 console.log(accName)
                 const nft = await client.getLastNFT(accName)
-                if(nft === undefined) return;
+                if(nft === undefined) continue;
                 else userNFTs.push(nft)
             }
             if(userNFTs.length){
