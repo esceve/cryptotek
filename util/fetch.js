@@ -185,7 +185,7 @@ module.exports = client => {
       }
       client.getLastNFT = async accName=>{
 
-        let url = `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${accName}&page=1&limit=1&order=desc&sort=updated`
+        let url = `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${accName}&page=1&limit=1&order=desc&sort=minted`
         
         const nft = await fetch(url)
             .then(res => res.json())
@@ -195,11 +195,12 @@ module.exports = client => {
                 }
                     
                 const data = json.data[0].data;
-                if ( (json.data[0].collection.created_at_time > Date.now() - 300000)) {
+                const timeNFT = Math.floor((json.data[0].minted_at_time)/1000);
+                if ( (timeNFT > Date.now() - 300000)) {
                     const price = await client.getNFTPrice(json.data[0].asset_id)
                     let nft = {
                         id: json.data[0].asset_id,
-                        created_at_time: json.data[0].collection.created_at_time,
+                        created_at_time: timeNFT,
                         name: data.name,
                         rarity: data.rarity,
                         img: `https://cloudflare-ipfs.com/ipfs/${data.img}`,
@@ -217,7 +218,6 @@ module.exports = client => {
         const price = await fetch(url)
             .then(res => res.json())
             .then(async json => {
-                console.log("im here 2");
                 let waxeur = await client.waxPrice();
                 let prices = {
                     avg_eur : parseFloat(json.average)*waxeur,
