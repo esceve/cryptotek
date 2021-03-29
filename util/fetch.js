@@ -252,6 +252,10 @@ module.exports = client => {
                         .addField('Par : ', `${discordUser.username} avec le compte ${nft.username}`)
                     
                     switch (nft.rarity) {
+                        case 'Abundant':
+                            break;
+                        case 'Common':
+                            break;    
                         case 'Rare':
                             embed
                                 .setColor("#3998d8")
@@ -279,6 +283,10 @@ module.exports = client => {
                             client.users.cache.get(users[user].userID).send(embed);
                             break;
                         default:
+                            embed
+                                .setColor("#396847")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
                             break;
                     }
                 }
