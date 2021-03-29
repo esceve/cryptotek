@@ -187,16 +187,15 @@ module.exports = client => {
 
         let url = `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${accName}&page=1&limit=1&order=desc&sort=minted`
         
-        const nft = await fetch(url)
+        const thenft = await fetch(url)
             .then(res => res.json())
             .then(async json => {
-                if (!json.data.length){
-                    return;
-                }
-                    
+                if (!json.data.length) return;
+       
                 const data = json.data[0].data;
                 const timeNFT = Math.floor((json.data[0].minted_at_time)/1000);
-                if ( (timeNFT > Date.now() - 300000)) {
+                const date = Math.floor((Date.now())/1000);
+                if ( (timeNFT > date - 1800)) { //Tout est en secondes
                     const price = await client.getNFTPrice(json.data[0].asset_id)
                     let nft = {
                         id: json.data[0].asset_id,
@@ -211,8 +210,7 @@ module.exports = client => {
                     return nft;
                 }
         })
-        console.log(`NFT dans getLastNFT ${nft}`)
-        return nft;
+        return thenft;
       }
       client.getNFTPrice = async nftid => {
         let url = `https://www.nfthive.io/api/price-info/${nftid}`
@@ -235,8 +233,7 @@ module.exports = client => {
             for(const accName of users[user].accounts){
                 console.log(accName)
                 const nft = await client.getLastNFT(accName)
-                console.log(nft)
-                if(!nft) return;
+                if(nft === undefined) return;
                 else userNFTs.push(nft)
             }
             if(userNFTs.length){
@@ -332,7 +329,7 @@ module.exports = client => {
            for(const acc in accounts){
                console.log(`Nom du compte : ${accounts[acc].name}`)
                const nft = await client.getLastNFT(accounts[acc].name)
-               console.log(`NFT dans showLastNFTs2 ${nft}`)
+               if(nft === undefined) continue;
                let date = new Date(nft.created_at_time * 1000)
                let embed = new MessageEmbed()
                    .setAuthor(`${accounts[acc].username}`, ` `)
