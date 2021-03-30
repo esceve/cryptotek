@@ -174,6 +174,15 @@ const MESSAGES = {
                 args: false,
                 usage: '',
                 cooldown: 2
+            },
+            TOTAL: {
+                name: 'total',
+                aliases: ['total'],
+                category: 'alien',
+                description: 'Total de votre balance',
+                args: false,
+                usage: '',
+                cooldown: 2
             }
         }
     }
