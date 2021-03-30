@@ -34,7 +34,7 @@ module.exports.run = async (client,message,args) => {
             embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
             message.channel.send(embed);
         }else {
-            let balance = await client.updateBalance(args[0],message.guild);
+            await client.updateBalance(args[0],message.guild);
             await client.isShitListed(args[0]);
             let acc = await client.getAccount(args[0])
             var nbWax = parseFloat(acc.nbWax);
