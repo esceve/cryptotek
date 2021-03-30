@@ -31,4 +31,4 @@ module.exports.run = async (client,message,args) => {
 
 };
 
-module.exports.help = MESSAGES.COMMANDS.ALIEN.CHECKBALANCE;
+module.exports.help = MESSAGES.COMMANDS.ALIEN.TOTAL;
