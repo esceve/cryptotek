@@ -17,12 +17,12 @@ module.exports.run = async (client,message,args) => {
             }else {
                 for(const accName of user.accounts){
                     await client.isShitListed(accName);
-                    let balance = await client.updateBalance(accName, message.guild)
+                    await client.updateBalance(accName, message.guild)
                     let acc = await client.getAccount(accName);
-                    nbWax += parseFloat(balance[0]);
-                    nbTlm += parseFloat(balance[1]);
+                    nbWax += parseFloat(acc.nbWax);
+                    nbTlm += parseFloat(acc.nbTLM);
                     embed
-                        .addField(`${acc.name}`,`Fonctionne: ${acc.isShitListed ? ":x:" : ":white_check_mark:"}\nNombre de WAX: ${balance[0]}\nNombre de TLM: ${balance[1]}`)
+                        .addField(`${acc.name}`,`Fonctionne: ${acc.isShitListed ? ":x:" : ":white_check_mark:"}\nNombre de WAX: ${acc.nbWax}\nNombre de TLM: ${acc.nbTLM}`)
                         .setColor("#006699");
                 }
             }
@@ -37,8 +37,8 @@ module.exports.run = async (client,message,args) => {
             let balance = await client.updateBalance(args[0],message.guild);
             await client.isShitListed(args[0]);
             let acc = await client.getAccount(args[0])
-            var nbWax = parseFloat(balance[0]);
-            var nbTlm = parseFloat(balance[1]);
+            var nbWax = parseFloat(acc.nbWax);
+            var nbTlm = parseFloat(acc.nbTLM);
 
             let nbWaxEUR = await client.waxPrice();
             let nbTlmEUR = await client.tlmPrice();
@@ -48,8 +48,8 @@ module.exports.run = async (client,message,args) => {
             const embed = new MessageEmbed()
                 .setAuthor(`${message.member.displayName} (${acc.name})`,message.member.user.displayAvatarURL())
                 .addFields(
-                    {name:'Nombre de WAX: ', value : `${balance[0]}`},
-                    {name:'Nombre de TLM: ', value : `${balance[1]}`},
+                    {name:'Nombre de WAX: ', value : `${acc.nbWax}`},
+                    {name:'Nombre de TLM: ', value : `${acc.nbTLM}`},
                     {name: 'Fonctionne: ', value: acc.isShitListed ? ":x:" : ":white_check_mark:"},
                     {name: "Conversion EUR", value:  `${WaxToEur} EUR`}
                 )

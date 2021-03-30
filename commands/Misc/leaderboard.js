@@ -18,10 +18,10 @@ module.exports.run = async (client, message, args) => {
         let nbWax = 0;
         let nbTlm = 0;
         for(const accName of users[user].accounts){
-            let balance = await client.updateBalance(accName, message.guild);
+            await client.updateBalance(accName, message.guild);
             let acc = await client.getAccount(accName);
-            nbWax += parseFloat(balance[0]);
-            nbTlm += parseFloat(balance[1]);
+            nbWax += parseFloat(acc.nbWax);
+            nbTlm += parseFloat(acc.nbTLM);
         }
         let nbWaxEUR = await client.waxPrice();
         let nbTlmEUR = await client.tlmPrice();

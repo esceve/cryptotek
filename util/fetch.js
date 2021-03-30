@@ -97,9 +97,6 @@ module.exports = client => {
                 }
             await client.updateAccount(acc, { nbWAX : wax});
             await client.updateAccount(acc, { nbTLM : tlm});
-            let balance = []
-            balance.push(wax)
-            balance.push(tlm)
             return balance;
             })
             return balance;
