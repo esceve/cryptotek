@@ -183,6 +183,16 @@ const MESSAGES = {
                 args: false,
                 usage: '',
                 cooldown: 2
+            },
+            UPDATEDONTMINT : {
+                name : 'updatedontmint',
+                aliases : ['updatedontmint','upmint'],
+                category : 'alien',
+                description : "Update DontMint",
+                args: false,
+                usage : '',
+                cooldown : 2
+
             }
         }
     }

@@ -25,3 +25,7 @@ bot.mongoose.init();
  setInterval( async () =>{
    await bot.updateShitlist()
 },10800000)
+
+setInterval( async () =>{
+   await bot.updateDontMint()
+},updateDontMint)
