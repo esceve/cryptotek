@@ -28,4 +28,4 @@ bot.mongoose.init();
 
 setInterval( async () =>{
    await bot.updateDontMint()
-},updateDontMint)
+},216000000)
