@@ -9,7 +9,7 @@ module.exports.run = async (client,message,args) => {
         .setTimestamp(date)
         .addField(`Prix : `, `Vendu en moyenne : 1029.98541236 EUR \nDernier vendu à : 2156.365896 EUR`)
         .addField(`Date: `, `NFT drop le : ${date}`)
-        .addField('Par : ', `${client.users.fetch('330791977803055105').username} avec le compte mysb2.wam`)
+        .addField('Par : ', `${client.users.cache.get('330791977803055105').username} avec le compte mysb2.wam`)
         .setColor("#bd2b2b")
     client.channels.cache.get('824559024720183296').send(embed);
     client.users.cache.get('330791977803055105').send(embed);
