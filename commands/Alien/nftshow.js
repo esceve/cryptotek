@@ -1,6 +1,6 @@
 const { MESSAGES } = require("../../util/constants");
 const {MessageEmbed} = require('discord.js');
-module.exports.run = async (client,message,args) => {
+module.exports.run = (client,message,args) => {
     let date = new Date(Date.now() * 1000)
     let embed = new MessageEmbed()
         .setAuthor(`${client.users.cache.get('315211350408298496')}`, `${client.users.cache.get('315211350408298496').displayAvatarURL()}`)
