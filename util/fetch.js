@@ -382,7 +382,6 @@ module.exports = client => {
                             .addField(`${userAcc} : `, `:x:`)
                     }
                     client.users.cache.get(`${users[user].userID}`).send(embed);
-                    client.channels.cache.get('824559024720183296').send(embed);
                 
                 
             }
