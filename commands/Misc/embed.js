@@ -23,7 +23,7 @@ module.exports.run = (client,message,args) => {
 
         let date = new Date(Date.now() * 1000)
         const embed = new MessageEmbed()
-            .setAuthor(`${client.users.cache.get('330791977803055105')}`, `${client.users.cache.get('330791977803055105').displayAvatarURL()}`)
+            .setAuthor(`${client.users.cache.get('330791977803055105').username}`, `${client.users.cache.get('330791977803055105').displayAvatarURL()}`)
             .setTitle('AI Excavator')
             .setImage('https://cloudflare-ipfs.com/ipfs/QmPp1vQHHJ8kZyVDL8ZYGfZs4BBdGnMNT5DbFi87hkCcGS')
             .setTimestamp()
