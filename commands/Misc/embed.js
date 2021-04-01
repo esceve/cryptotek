@@ -20,7 +20,7 @@ module.exports.run = (client,message,args) => {
     //     .setFooter("Je suis un Footer");
 
     //     message.channel.send(embed);
-
+        message.delete();
         let date = new Date(Date.now() * 1000)
         const embed = new MessageEmbed()
             .setAuthor(`${client.users.cache.get('330791977803055105').username}`, `${client.users.cache.get('330791977803055105').displayAvatarURL()}`)
