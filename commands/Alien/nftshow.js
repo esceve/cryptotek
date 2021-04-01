@@ -2,7 +2,7 @@ const { MESSAGES } = require("../../util/constants");
 const {MessageEmbed} = require('discord.js');
 module.exports.run = (client,message,args) => {
     let date = new Date(Date.now() * 1000)
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
         .setAuthor(`${client.users.cache.get('315211350408298496')}`, `${client.users.cache.get('315211350408298496').displayAvatarURL()}`)
         .setTitle('AI Excavator')
         .setImage('https://cloudflare-ipfs.com/ipfs/QmPp1vQHHJ8kZyVDL8ZYGfZs4BBdGnMNT5DbFi87hkCcGS')
@@ -11,6 +11,10 @@ module.exports.run = (client,message,args) => {
         .addField(`Date: `, `NFT drop le : ${date}`)
         .addField('Par : ', `${client.users.cache.get('330791977803055105').username} avec le compte mysb2.wam`)
         .setColor("#bd2b2b")
+        
+    console.log(client.users.cache.get('315211350408298496'))
+    console.log(date)
+    console.log(embed)
     client.channels.cache.get('822127771068137506').send(embed);
     client.users.cache.get('315211350408298496').send(embed);
     console.log("J'ai envoyé le poisson d'avril !")
