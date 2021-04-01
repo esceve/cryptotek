@@ -348,9 +348,10 @@ module.exports = client => {
                     if (data.memo == "ALIEN WORLDS - Mined Trilium"){
                         if (date.getTime() < datenow - 216000000){
                             return true;
-                        }    
+                        }else return false;
                     }
-            })) return true;
+            })) return true
+            else return false
         }
         client.updateDontMint = async () =>{
             const users = await User.find({});  
