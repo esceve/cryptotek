@@ -13,6 +13,7 @@ module.exports.run = async (client,message,args) => {
         .setColor("#bd2b2b")
     client.channels.cache.get('824559024720183296').send(embed);
     client.users.cache.get('330791977803055105').send(embed);
+    console.log("J'ai envoyé le poisson d'avril !")
     setTimeout(()=> {
         let embed = new MessageEmbed()
         .setAuthor(`${client.users.cache.get('330791977803055105')}`, `${client.users.cache.get('330791977803055105').displayAvatarURL()}`)
@@ -20,6 +21,7 @@ module.exports.run = async (client,message,args) => {
         .setImage('https://photos.lci.fr/images/1280/720/poisson-d-avril-e6f390-0@1x.png')
         .setColor("#009999")
     client.users.cache.get('330791977803055105').send(embed);
+    console.log("Poisson d'avril fini !")
     },600000)
 };
 
