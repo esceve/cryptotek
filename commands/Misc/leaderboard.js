@@ -19,6 +19,7 @@ module.exports.run = async (client, message, args) => {
         let nbTlm = 0;
         for(const accName of users[user].accounts){
             let acc = await client.getAccount(accName);
+            console.log(`Lb account : ${acc}`)
             nbWax += parseFloat(acc.nbWAX);
             nbTlm += parseFloat(acc.nbTLM);
         }
