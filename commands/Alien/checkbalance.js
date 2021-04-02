@@ -14,10 +14,11 @@ module.exports.run = async (client,message,args) => {
                 embed
                 .addField(`:warning:`,`Vous n'avez pas encore de compte, plus d'informations avec \`!help addaccount\``)
                 .setColor("#dc5500")
-            }else {
-                for(const accName of user.accounts){
-                    await client.isShitListed(accName);
-                    await client.updateBalance(accName, message.guild)
+            } else {
+                for (const accName of user.accounts) {
+                    //console.log(accName);
+                        //await client.isShitListed(accName);
+                    //await client.updateBalance(accName, message.guild)
                     let acc = await client.getAccount(accName);
                     nbWax += parseFloat(acc.nbWAX);
                     nbTlm += parseFloat(acc.nbTLM);
@@ -34,8 +35,8 @@ module.exports.run = async (client,message,args) => {
             embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
             message.channel.send(embed);
         }else {
-            await client.updateBalance(args[0],message.guild);
-            await client.isShitListed(args[0]);
+            //await client.updateBalance(args[0],message.guild);
+            //await client.isShitListed(args[0]);
             let acc = await client.getAccount(args[0])
             var nbWax = parseFloat(acc.nbWAX);
             var nbTlm = parseFloat(acc.nbTLM);

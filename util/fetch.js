@@ -162,8 +162,8 @@ module.exports = client => {
         )
     }
 
-    client.isShitListed = async accName=>{
-
+    client.isShitListed = async accName => {
+        
         let url = `https://wax.pink.gg/v2/history/get_actions?account=${accName}&skip=0&limit=1&sort=desc&transfer.to=${accName}`
         await fetch(url)
             .then(res => res.json())
