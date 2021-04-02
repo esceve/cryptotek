@@ -56,6 +56,7 @@ module.exports.run = async (client, message, args) => {
                     Accounts: ${usersLeadboard[user].nbrAccount}`
             )      
     }
+    console.log(usersLeadboard)
     message.channel.send(embed);
 };
 
