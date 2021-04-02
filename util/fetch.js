@@ -326,4 +326,65 @@ module.exports = client => {
             }
         }
 
+        client.dontMint = async (accName) =>{
+            let url = `https://wax.pink.gg/v2/history/get_actions?account=${accName}&skip=0&limit=1&sort=desc&transfer.to=${accName}`
+            if (await fetch(url)
+            .then(res => res.json())
+            .then(async json => {
+                if(!json.actions[0]) return;
+                    let data = json.actions[0].act.data;
+                    let temps = json.actions[0].timestamp;
+                    let annee = temps.slice(0,4)
+                    let mois = temps.slice(5,7)
+                    let jour = temps.slice(8,10)
+                    let heure = temps.slice(11,13)
+                    let minutes = temps.slice(14,16)
+                    let secondes = temps.slice(17,19)
+                    let ms = temps.slice(20)
+                    const datenow = Date.now()
+                    const date = new Date();
+                    date.setHours(parseInt(heure),parseInt(minutes),parseInt(secondes),parseInt(ms))
+                    date.setFullYear(annee,mois -1 ,jour)                 
+                    if (data.memo == "ALIEN WORLDS - Mined Trilium"){
+                        if (date.getTime() < datenow - 216000000){
+                            return true;
+                        }else return false;
+                    }
+            })) return true
+            else return false
+        }
+        client.updateDontMint = async () =>{
+            const users = await User.find({});  
+            for(const user in users){
+                let userAccounts = []
+                console.log(`${users[user].username}`)
+                for(const accName of users[user].accounts){
+                    
+                    let isDontMint = await client.dontMint(accName)
+                    const acc = await client.getAccount(accName)
+                    console.log(`${acc.name} ne mine plus : ${isDontMint}`)
+                    if (isDontMint) {
+                        userAccounts.push(acc.name)                        
+                    }
+                }
+
+                if(userAccounts.length == 0) continue;
+                    let member = await client.guilds.fetch(`${users[user].guildID}`)
+                            .then(guild => guild.members.fetch(`${users[user].userID}`))
+                    let discordUser = member.user;
+                    let embed = new MessageEmbed()
+                            .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
+                            .setTitle(":warning: Vos comptes ne minent plus depuis une heure ou + :warning:")
+                            .setDescription('Veuillez vérifier que les comptes ci-dessous sont toujours entrain de miner')
+                            .setTimestamp()
+                    for(const userAcc of userAccounts){
+                        embed
+                            .addField(`${userAcc} : `, `:x:`)
+                    }
+                    client.users.cache.get(`${users[user].userID}`).send(embed);
+                
+                
+            }
+        }
+
 };
