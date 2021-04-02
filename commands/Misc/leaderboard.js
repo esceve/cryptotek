@@ -5,20 +5,19 @@ const {MessageEmbed} = require("discord.js");
 const user = require("../../models/user");
 
 module.exports.run = async (client, message, args) => {
-    let embed = new MessageEmbed();
-    embed
+    let embed = new MessageEmbed()
         .setAuthor(
             `${message.member.displayName}`,
             message.member.user.displayAvatarURL()
         )
         .setTimestamp();
+
     let users = await User.find({});
     let usersLeadboard = [];
     for (const user in users) {
         let nbWax = 0;
         let nbTlm = 0;
         for(const accName of users[user].accounts){
-            //await client.updateBalance(accName, message.guild);
             let acc = await client.getAccount(accName);
             nbWax += parseFloat(acc.nbWAX);
             nbTlm += parseFloat(acc.nbTLM);
@@ -47,7 +46,6 @@ module.exports.run = async (client, message, args) => {
         }
         return 0
     })
-    var i = 1;
     for (const user in usersLeadboard) {
         embed.
             addField(
@@ -56,9 +54,7 @@ module.exports.run = async (client, message, args) => {
                     TLM: ${usersLeadboard[user].tlm.toFixed(2)} TLM
                     EUR: ${usersLeadboard[user].eur.toFixed(2)} EUR
                     Accounts: ${usersLeadboard[user].nbrAccount}`
-            )
-               
-        i++;
+            )      
     }
     message.channel.send(embed);
 };
