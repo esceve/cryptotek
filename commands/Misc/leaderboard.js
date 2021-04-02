@@ -5,6 +5,7 @@ const {MessageEmbed} = require("discord.js");
 const user = require("../../models/user");
 
 module.exports.run = async (client, message, args) => {
+    console.log('Leaderboard')
     let embed = new MessageEmbed()
         .setAuthor(
             `${message.member.displayName}`,
