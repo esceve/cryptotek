@@ -77,6 +77,15 @@ const MESSAGES = {
                 cooldown : 3
 
             },
+            CREATEAPI : {
+                name : 'createapi',
+                aliases : ['createapi','mkapi'],
+                category : 'admin',
+                description : "Créé l'instance pour l'api",
+                args: false,
+                usage : '',
+                cooldown : 3
+            },
             CONFIG : {
                 name : 'config',
                 aliases : ['config'],

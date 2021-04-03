@@ -36,9 +36,6 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
             })
             console.log({
                 username: users[user].username,
-                nbrAccount: users[user].accounts.length,
-                wax: nbWax,
-                tlm: nbTlm,
                 eur: WaxToEur
             })
         }
@@ -64,7 +61,6 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
             )
             i++;
     }
-    console.log("Userleadboard : "+usersLeadboard)
     message.channel.send(embed);
 };
 

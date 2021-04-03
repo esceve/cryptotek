@@ -82,4 +82,13 @@ module.exports =  client => {
         let data = await client.getAccount(account)
         return data.deleteOne();
     };
+
+    client.createAPI = async () => {
+        let api = {}
+        const merged = Object.assign({ _id : mongoose.Types.ObjectId()},
+        api);
+        const createAPI = await new API(merged);
+        createAPI.save();
+};
+
 };

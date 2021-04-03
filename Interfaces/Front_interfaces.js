@@ -89,13 +89,7 @@ const getTlmPrice = async () => {
             )
     }
     
-    const createAPI = async () => {
-            let api = {}
-            const merged = Object.assign({ _id : mongoose.Types.ObjectId()},
-            api);
-            const createAPI = await new API(merged);
-            createAPI.save();
-    };
+
     
     const updateUser = async (user,settings) => {
         let data = user;
