@@ -10,6 +10,15 @@ const MESSAGES = {
                 usage : '<votre_message>',
                 cooldown : 10
             },
+            TEST : {
+                name : 'test',
+                aliases : ['test','t'],
+                category : 'misc',
+                description : "Répète le message d'un utilisateur",
+                args : true,
+                usage : '<votre_message>',
+                cooldown : 10
+            },
             EMBED : {
                 name : 'embed',
                 aliases : ['emb','e'],
