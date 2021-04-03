@@ -294,7 +294,7 @@ module.exports = client => {
       client.updateAllBalances = async () =>{
         const users = await User.find({}); 
         for(const user in users){
-            let guild = await client.guilds.fetch(`${users[user].guildID}`);
+            const guild = await client.guilds.fetch(`${users[user].guildID}`);
             console.log(`${users[user].username}`)
             for(const accName of users[user].accounts){
                 await client.updateBalance(accName,guild)
