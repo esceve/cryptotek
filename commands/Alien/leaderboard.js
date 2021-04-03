@@ -34,13 +34,6 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
                 tlm: nbTlm,
                 eur: WaxToEur
             })
-            console.log({
-                username: users[user].username,
-                nbrAccount: users[user].accounts.length,
-                wax: nbWax,
-                tlm: nbTlm,
-                eur: WaxToEur
-            })
         }
     }
     usersLeadboard.sort(function (a, b) {
@@ -52,6 +45,7 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
         }
         return 0
     })
+    var i = 0;
     for (const user in usersLeadboard) {
         embed.
             addField(
@@ -60,9 +54,9 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
                     TLM: ${usersLeadboard[user].tlm.toFixed(2)} TLM
                     EUR: ${usersLeadboard[user].eur.toFixed(2)} EUR
                     Accounts: ${usersLeadboard[user].nbrAccount}`
-            )      
+            )
+            i++;
     }
-    console.log("Userleadboard : "+usersLeadboard)
     message.channel.send(embed);
 };
 
