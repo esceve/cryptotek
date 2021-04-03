@@ -18,7 +18,6 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
         let nbTlm = 0;
         for(const accName of users[user].accounts){
             let acc = await client.getAccount(accName);
-            console.log(`Lb account : ${acc}`)
             nbWax += parseFloat(acc.nbWAX);
             nbTlm += parseFloat(acc.nbTLM);
         }
@@ -56,6 +55,7 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
                     Accounts: ${usersLeadboard[user].nbrAccount}`
             )      
     }
+    console.log("Userleadboard : "+usersLeadboard)
     message.channel.send(embed);
 };
 
