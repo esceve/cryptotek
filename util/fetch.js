@@ -145,6 +145,7 @@ module.exports = client => {
                 var currencies = res.data
                 var tlmCurrencies = 0;
                 for (item in currencies) {
+                    if(currencies[item].id == undefined) continue;
                     if (currencies[item].id == 26) {
                         tlmCurrencies = currencies[item].last_price;
                     }
