@@ -3,7 +3,7 @@ const { User} = require("../../models/index");
 const {MessageEmbed} = require("discord.js");
 
 module.exports.run = async (client, message, args,settings,dbUser) => {
-    console.log('Leaderboard')
+    console.log('LEADERBOOOOOOOARD')
     let embed = new MessageEmbed()
         .setAuthor(
             `${message.member.displayName}`,
@@ -60,4 +60,4 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
     message.channel.send(embed);
 };
 
-module.exports.help = MESSAGES.COMMANDS.MISC.LEADERBOARD;
+module.exports.help = MESSAGES.COMMANDS.ALIEN.LEADERBOARD;

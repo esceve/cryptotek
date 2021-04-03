@@ -55,15 +55,6 @@ const MESSAGES = {
                 usage : '@<utilisateur>',
                 cooldown : 10
             },
-            LEADERBOARD: {
-                name : 'leaderboard',
-                aliases : ['leaderboard','lb'],
-                category : 'misc',
-                description : "Affiche le leaderboard",
-                args: false,
-                usage : '',
-                cooldown : 2
-            },
             PRICE : {
                 name: 'price',
                 aliases: ['price', 'currency'],
@@ -107,6 +98,15 @@ const MESSAGES = {
             }
         },
         ALIEN : {
+            LEADERBOARD: {
+                name : 'leaderboard',
+                aliases : ['leaderboard','lb'],
+                category : 'alien',
+                description : "Affiche le leaderboard",
+                args: false,
+                usage : '',
+                cooldown : 2
+            },
             ADDACCOUNT : {
                 name : 'addaccount',
                 aliases : ['addaccount', 'mkacc'],
