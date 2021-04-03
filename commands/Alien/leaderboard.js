@@ -26,8 +26,15 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
         var tlmToWax = nbTlm * nbTlmEUR;
         var totalWax = tlmToWax + nbWax;
         var WaxToEur = totalWax * nbWaxEUR;
-        if (users[user].guildName === message.guild.name) {
+        if (users[user].guildName === message.guild.name && users[user].accounts.length > 0 ) {
             usersLeadboard.push({
+                username: users[user].username,
+                nbrAccount: users[user].accounts.length,
+                wax: nbWax,
+                tlm: nbTlm,
+                eur: WaxToEur
+            })
+            console.log({
                 username: users[user].username,
                 nbrAccount: users[user].accounts.length,
                 wax: nbWax,
@@ -57,6 +64,7 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
             )
             i++;
     }
+    console.log("Userleadboard : "+usersLeadboard)
     message.channel.send(embed);
 };
 
