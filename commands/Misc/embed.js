@@ -1,63 +1,47 @@
 const {MessageEmbed} = require('discord.js');
-const { User} = require("../../models/index");
 const {MESSAGES} = require('../../util/constants');
 
 module.exports.help = MESSAGES.COMMANDS.MISC.EMBED;
 
 module.exports.run = (client,message,args) => {
-    let embed = new MessageEmbed()
-        .setAuthor(
-            `${message.member.displayName}`,
-            message.member.user.displayAvatarURL()
-        )
-        .setTimestamp();
+    // const embed = new MessageEmbed()
+    //     .setColor("#dc143c")
+    //     .setTitle("Titre de l'embed")
+    //     .setURL("https://google.fr")
+    //     .setDescription("Description de l'embed")
+    //     .addField("Je suis un champ","et je suis sa valeur")
+    //     .setThumbnail(client.user.displayAvatarURL())
+    //     .addFields(
+    //         {name:'Je suis le champ 1 ', value :'et je suis sa valeur', inline: true},
+    //         {name:'Je suis le champ 2', value :'et en plus, on est alignés', inline: true}
+    //     )
+    //     .setImage(client.user.displayAvatarURL())
+    //     .setTimestamp()
+    //     .setFooter("Je suis un Footer");
 
-    let users = await User.find({});
-    let usersLeadboard = [];
-    for (const user in users) {
-        let nbWax = 0;
-        let nbTlm = 0;
-        for(const accName of users[user].accounts){
-            let acc = await client.getAccount(accName);
-            console.log(`Lb account : ${acc}`)
-            nbWax += parseFloat(acc.nbWAX);
-            nbTlm += parseFloat(acc.nbTLM);
-        }
-        let nbWaxEUR = await client.waxPrice();
-        let nbTlmEUR = await client.tlmPrice();
-        var tlmToWax = nbTlm * nbTlmEUR;
-        var totalWax = tlmToWax + nbWax;
-        var WaxToEur = totalWax * nbWaxEUR;
-        if (users[user].guildName === message.guild.name) {
-            usersLeadboard.push({
-                username: users[user].username,
-                nbrAccount: users[user].accounts.length,
-                wax: nbWax,
-                tlm: nbTlm,
-                eur: WaxToEur
-            })
-        }
-    }
-    usersLeadboard.sort(function (a, b) {
-        if ( a.eur < b.eur ){
-            return 1;
-        }
-        if ( a.eur > b.eur ){
-            return -1;
-        }
-        return 0
-    })
-    for (const user in usersLeadboard) {
-        embed.
-            addField(
-                `${usersLeadboard[user].username} N°${i}`,
-                `WAX: ${usersLeadboard[user].wax.toFixed(2)} WAX
-                    TLM: ${usersLeadboard[user].tlm.toFixed(2)} TLM
-                    EUR: ${usersLeadboard[user].eur.toFixed(2)} EUR
-                    Accounts: ${usersLeadboard[user].nbrAccount}`
-            )      
-    }
-    console.log(usersLeadboard)
-    message.channel.send(embed);
+    //     message.channel.send(embed);
+        // message.delete();
+        // let date = new Date(Date.now() * 1000)
+        // const embed = new MessageEmbed()
+        //     .setAuthor(`${client.users.cache.get('330791977803055105').username}`, `${client.users.cache.get('330791977803055105').displayAvatarURL()}`)
+        //     .setTitle('AI Excavator')
+        //     .setImage('https://cloudflare-ipfs.com/ipfs/QmPp1vQHHJ8kZyVDL8ZYGfZs4BBdGnMNT5DbFi87hkCcGS')
+        //     .setTimestamp()
+        //     .addField(`Prix : `, `Vendu en moyenne : 1029.98541236 EUR \nDernier vendu à : 2156.365896 EUR`)
+        //     .addField(`Date: `, `NFT drop le : ${date}`)
+        //     .addField('Par : ', `${client.users.cache.get('330791977803055105').username} avec le compte zewb4.wam`)
+        //     .setColor("#bd2b2b")
+    
+        // client.channels.cache.get('824559024720183296').send(embed);
+        // client.users.cache.get('330791977803055105').send(embed);
+        // setTimeout(()=> {
+        //     let embed = new MessageEmbed()
+        //     .setAuthor(`${client.users.cache.get('315211350408298496')}`, `${client.users.cache.get('315211350408298496').displayAvatarURL()}`)
+        //     .setTitle("Poisson d'Avril !")
+        //     .setImage('https://photos.lci.fr/images/1280/720/poisson-d-avril-e6f390-0@1x.png')
+        //     .setColor("#009999")
+        // client.users.cache.get('315211350408298496').send(embed);
+        // console.log("Poisson d'avril fini !")
+        // },1800000)
 };
 
