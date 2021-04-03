@@ -5,7 +5,7 @@ const MESSAGES = {
                 name : 'say',
                 aliases : ['repeat','rep'],
                 category : 'misc',
-                description : "Répète le prout d'un utilisateur",
+                description : "Répète le message d'un utilisateur",
                 args : true,
                 usage : '<votre_message>',
                 cooldown : 10

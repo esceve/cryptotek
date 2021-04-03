@@ -1,7 +1,7 @@
 const { MESSAGES } = require("../../util/constants");
 const {MessageEmbed} = require('discord.js');
 module.exports.run = async (client,message,args) => {
-
+        
         if(!args.length) {
             let nbWax = 0;
             let nbTlm = 0;
@@ -33,7 +33,7 @@ module.exports.run = async (client,message,args) => {
             var totalWax = tlmToWax + nbWax;
             var WaxToEur = totalWax * nbWaxEUR;
             embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
-            message.channel.send(embed);
+            client.users.cache.get(message.member.user.id).send(embed);
         }else {
             //await client.updateBalance(args[0],message.guild);
             //await client.isShitListed(args[0]);
@@ -56,9 +56,9 @@ module.exports.run = async (client,message,args) => {
                 )
                 .setColor(acc.isShitListed ? "#990000" : "#009922")
                 .setTimestamp();
-                message.channel.send(embed);
+                client.users.cache.get(message.member.user.id).send(embed);
         }
-
+        message.delete();
 
 };
 
