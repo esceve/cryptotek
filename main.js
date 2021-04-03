@@ -52,7 +52,7 @@ setInterval(async () => {
 
 setInterval(async () => {
    console.log("[INFO] Updating Balance bot...")
-   await bot.updateBalance();
+   await bot.updateAllBalances();
    console.log("Finish!");
 }, 420000)
 
