@@ -2,7 +2,6 @@ const { MESSAGES } = require("../../util/constants");
 const mongoose = require("mongoose");
 const { Guild, User, Account } = require("../../models/index");
 const {MessageEmbed} = require("discord.js");
-const user = require("../../models/user");
 
 module.exports.run = async (client, message, args) => {
     console.log('Leaderboard')
