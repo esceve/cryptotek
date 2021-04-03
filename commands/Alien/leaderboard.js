@@ -1,5 +1,5 @@
 const { MESSAGES } = require("../../util/constants");
-const { User} = require("../../models/index");
+const { User, Account} = require("../../models/index");
 const {MessageEmbed} = require("discord.js");
  
 
@@ -28,6 +28,13 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
         var WaxToEur = totalWax * nbWaxEUR;
         if (users[user].guildName === message.guild.name) {
             usersLeadboard.push({
+                username: users[user].username,
+                nbrAccount: users[user].accounts.length,
+                wax: nbWax,
+                tlm: nbTlm,
+                eur: WaxToEur
+            })
+            console.log({
                 username: users[user].username,
                 nbrAccount: users[user].accounts.length,
                 wax: nbWax,
