@@ -54,9 +54,10 @@ router.get('/rmacc', async (req, res) => {
                 let dbUser = await User.findOne({ username : req.body.username});
                 let acc = dbUser.accounts;
                 acc.splice(acc.indexOf(req.body.name),1);
-                await client.updateUser(dbUser, {accounts: acc});
-                await client.deleteAccount(req.body.name);
+                await updateUser(dbUser, {accounts: acc});
                 res.status(200).send({message: `Le compte ${req.body.name} a bien été supprimé.`});
+                data.deleteOne();
+                
         }
        
 })
@@ -104,7 +105,7 @@ const getTlmPrice = async () => {
         }
         return data.updateOne(settings);
     };
-      const updateUser = async (api,settings) => {
+      const updateAPI = async (api,settings) => {
         let data = api;
         if (typeof data !== "object") data ={};
         for (const key in settings){
