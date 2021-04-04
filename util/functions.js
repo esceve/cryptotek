@@ -61,11 +61,14 @@ module.exports =  client => {
             return data;
         } 
         else{
-            await client.createAccount({
-                name: account
-            });
-        data = await Account.findOne({ name : account});
-        return data;
+            const compteExiste = await client.accountExist(accName,message.guild);
+            if(compteExiste){
+                await client.createAccount({
+                    name: account
+                });
+                data = await Account.findOne({ name : account});
+                return data;
+            }  
         }
     };
 
