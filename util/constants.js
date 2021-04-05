@@ -141,7 +141,7 @@ const MESSAGES = {
                 aliases : ['checkbalance','balance'],
                 category : 'alien',
                 description : "La commande renvoie la quantité de WAX/TLM de tous les comptes associés à l'utilisateur.",
-                args: true,
+                args: false,
                 usage : '',
                 cooldown : 2
 
