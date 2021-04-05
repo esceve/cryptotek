@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (client, message, args) => {
     let embed = new MessageEmbed();
-    let priceWaxEUR = await client.waxPrice();
+    let priceWaxEUR = client.waxPrice();
     let priceTlmWAX = await client.tlmPrice();
 
     embed
