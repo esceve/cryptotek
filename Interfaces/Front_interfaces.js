@@ -27,6 +27,18 @@ router.get('/total', async (req, res) => {
    res.status(200).send({total: total});
 });
 
+router.get('/shitlist', async (req, res) => {
+    const users = await User.findOne({username : req.query.username});  
+    let userAccounts = []
+    for(const accName of user.accounts){
+        let acc = await Account.findOne({name: accName});
+        if (acc.isShitListed) {
+            userAccounts.push(acc.name)                                     
+        }
+    }
+   res.status(200).send({shitlist : userAccounts});
+});
+
 router.get('/usernames', async (req, res) => {
         let users = await User.find({});
         let usernames = [];
