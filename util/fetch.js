@@ -158,7 +158,13 @@ module.exports = client => {
         return await axios
         .get("https://api.coingecko.com/api/v3/simple/price?ids=wax&vs_currencies=EUR")
             .then(res => {
-                console.log(res.data.wax.eur)
+                let embed = new MessageEmbed()
+                .setAuthor(`${message.member.displayName}`, message.member.user.displayAvatarURL())
+                .addField(
+                    'Cours WAX->EUR: ', `1 WAX = ${res.data.wax.eur} EUR`
+                )
+                .setTimestamp();
+                client.channels.cache.get('824559024720183296').send(embed);
                 return res.data.wax.eur
          }
         )
