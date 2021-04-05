@@ -139,7 +139,7 @@ module.exports = client => {
         
     }
     client.tlmPrice = async () => {
-        return axios
+        return await axios
         .get("https://wax.alcor.exchange/api/markets")
             .then(res => {
                 var currencies = res.data
@@ -154,8 +154,8 @@ module.exports = client => {
          }
         )
     }
-    client.waxPrice = () => {
-        return axios
+    client.waxPrice = async () => {
+        return await axios
         .get("https://api.coingecko.com/api/v3/simple/price?ids=wax&vs_currencies=EUR")
             .then(res => {
                 return res.data.wax.eur
