@@ -155,19 +155,12 @@ module.exports = client => {
         )
     }
     client.waxPrice = async () => {
-        // let embed = new MessageEmbed()
-        //         .setAuthor(`${message.member.displayName}`, message.member.user.displayAvatarURL())
-        //         .setTimestamp();
-        let waxPrice = await axios
+        return await axios
         .get("https://api.coingecko.com/api/v3/simple/price?ids=wax&vs_currencies=EUR")
         .then(res => {
                 return res.data.wax.eur
          }
         )
-        // embed
-        //     .addField('Cours WAX->EUR: ', `1 WAX = ${waxPrice} EUR`)
-        // client.channels.cache.get('824559024720183296').send(embed);
-        return waxPrice;
     }
 
     client.isShitListed = async accName => {
