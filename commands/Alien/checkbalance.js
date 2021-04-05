@@ -46,7 +46,8 @@ module.exports.run = async (client,message,args) => {
             embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
         }
         client.users.cache.get(message.member.user.id).send(embed);
-        client.users.cache.get(message.member.user.id).send(embed2);
+        if(i>24) client.users.cache.get(message.member.user.id).send(embed2);
+
         message.delete();
 
 };

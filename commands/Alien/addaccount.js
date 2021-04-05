@@ -56,7 +56,8 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
         }
     } 
     message.channel.send(embed);
-    message.channel.send(embed2);
+    if(i>24) message.channel.send(embed2);
+    
 };
 
 module.exports.help = MESSAGES.COMMANDS.ALIEN.ADDACCOUNT;
