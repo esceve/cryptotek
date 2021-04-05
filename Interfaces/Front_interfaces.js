@@ -7,7 +7,7 @@ const router = new express.Router();
 router.get('/total', async (req, res) => {
     let nbWax = 0;
     let nbTlm = 0;
-    console.log(req.body.username)
+    console.log(req.query.username)
     let user = await User.findOne({username : req.body.username});
     for(const accName of user.accounts){
         let acc = await Account.findOne({name: accName});
