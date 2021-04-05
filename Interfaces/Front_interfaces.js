@@ -7,15 +7,15 @@ const router = new express.Router();
 router.get('/total', async (req, res) => {
     let nbWax = 0;
     let nbTlm = 0;
-    let user = await User.find({username : req.body.username});
+    console.log(req.body.username)
+    let user = await User.findOne({username : req.body.username});
     for(const accName of user.accounts){
-        //await client.updateBalance(accName, message.guild)
-        let acc = await client.getAccount(accName);
+        let acc = await Account.findOne({name: accName});
         nbWax += parseFloat(acc.nbWAX);
         nbTlm += parseFloat(acc.nbTLM);
     }
-    let nbWaxEUR = await client.waxPrice();
-    let nbTlmEUR = await client.tlmPrice();
+    let nbWaxEUR = await getWaxPrice();
+    let nbTlmEUR = await getTlmPrice();
     var tlmToWax = nbTlm * nbTlmEUR;
     var totalWax = tlmToWax + nbWax;
     var WaxToEur = totalWax * nbWaxEUR;
@@ -24,7 +24,7 @@ router.get('/total', async (req, res) => {
         nbWax,
         nbTlm
     }
-    res.status(200).send({total: total});
+   res.status(200).send({total: total});
 });
 
 router.get('/usernames', async (req, res) => {
