@@ -6,18 +6,28 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
                 .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
                 .setColor("#92f058")
                 .setTimestamp();
-    for(const accName of args){
+    let embed2 = new MessageEmbed()
+                .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
+                .setColor("#92f058")
+                .setTimestamp();
+    let accountsName = []
+    args = args.split(' ');
+
+    for(const accountName of args){
+        if(accountName.endsWith(".wam")) accountsName.push(accountName)
+    }
+    let i = 0;
+    for(const accName of accountsName){
+        i++;
         let data = await client.getAccount(accName);
+
         if(data){
-            if(!data.username){ //Cas où le compte a été créé mais sans utilisateur
-                await client.updateAccount(data.name, { username : message.member.user.tag});
-                let acc = dbUser.accounts;
-                if(!acc.includes(accName)) acc.push(accName);
-                await client.updateUser(message.member.user, {accounts: acc});
-                embed.addField(`Bot `,`${accName} ajouté avec succès`)
-            }else { // Cas où le compte a été déjà créé
+            if(i > 24){
+                embed2.addField(`Bot `, `${accName} a déjà été ajouté par ${data.username}.`)
+            }else{
                 embed.addField(`Bot `, `${accName} a déjà été ajouté par ${data.username}.`)
-            }   
+            }
+            
         }else { // Cas où le compte n'a pas été créé
             const compteExiste = await client.accountExist(accName,message.guild);
             if (compteExiste) { //On l'ajoute si et seulement si il existe
@@ -25,20 +35,28 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
                     username: message.member.user.tag,
                     name: accName,
                 });
-                //await client.updateBalance(accName,message.guild)
                 let acc = dbUser.accounts;
                 if(!acc.includes(accName)) acc.push(accName);
                 await client.updateUser(message.member.user, {accounts: acc});
-                embed.addField(`Bot `,`${accName} ajouté avec succès`)
+                if(i>24){
+                    embed2.addField(`Bot `,`${accName} ajouté avec succès`)
+                }else{
+                    embed.addField(`Bot `,`${accName} ajouté avec succès`)
+                }
+                
                 
             }else {
-                embed.addField(`Bot `, `${accName} n'existe pas.`)
+                if(i>24){
+                    embed2.addField(`Bot `, `${accName} n'existe pas.`)
+                }else{
+                    embed.addField(`Bot `, `${accName} n'existe pas.`)
+                }
             }
 
         }
     } 
     message.channel.send(embed);
-    
+    message.channel.send(embed2);
 };
 
 module.exports.help = MESSAGES.COMMANDS.ALIEN.ADDACCOUNT;

@@ -57,19 +57,8 @@ module.exports =  client => {
 
     client.getAccount = async account => {
         let data = await Account.findOne({ name : account});
-        if(data){
-            return data;
-        } 
-        else{
-            const compteExiste = await client.accountExist(accName,message.guild);
-            if(compteExiste){
-                await client.createAccount({
-                    name: account
-                });
-                data = await Account.findOne({ name : account});
-                return data;
-            }  
-        }
+        if(data) return data;
+        else return;
     };
 
     client.updateAccount = async (account, settings) => {
