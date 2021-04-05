@@ -60,4 +60,4 @@ setInterval( async () =>{
    console.log("[INFO] Updating stuck bot warning...")
    await bot.updateDontMint()
    console.log("Finish!");
-},3600000)
+},6800000) 

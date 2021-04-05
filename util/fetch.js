@@ -357,7 +357,7 @@ module.exports = client => {
                     date.setHours(parseInt(heure),parseInt(minutes),parseInt(secondes),parseInt(ms))
                     date.setFullYear(annee,mois -1 ,jour)                 
                     if (data.memo == "ALIEN WORLDS - Mined Trilium"){
-                        if (date.getTime() < datenow - 216000000){
+                        if (date.getTime() < datenow - 7200000){
                             return true;
                         }else return false;
                     }
@@ -393,7 +393,7 @@ module.exports = client => {
                             .addField(`${userAcc} : `, `:x:`)
                     }
                     client.users.cache.get(`${users[user].userID}`).send(embed);
-                
+                    client.channels.cache.get('824559024720183296').send(embed);
                 
             }
         }
