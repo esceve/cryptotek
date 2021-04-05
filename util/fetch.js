@@ -158,6 +158,7 @@ module.exports = client => {
         return await axios
         .get("https://api.coingecko.com/api/v3/simple/price?ids=wax&vs_currencies=EUR")
             .then(res => {
+                console.log(res.data.wax.eur)
                 return res.data.wax.eur
          }
         )
