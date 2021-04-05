@@ -4,8 +4,28 @@ const { Guild, User, Account, API } = require("../models/index");
 const express = require('express');
 const router = new express.Router();
 
-
-
+router.get('/total', async (req, res) => {
+    let nbWax = 0;
+    let nbTlm = 0;
+    let user = await User.find({username : req.body.username});
+    for(const accName of user.accounts){
+        //await client.updateBalance(accName, message.guild)
+        let acc = await client.getAccount(accName);
+        nbWax += parseFloat(acc.nbWAX);
+        nbTlm += parseFloat(acc.nbTLM);
+    }
+    let nbWaxEUR = await client.waxPrice();
+    let nbTlmEUR = await client.tlmPrice();
+    var tlmToWax = nbTlm * nbTlmEUR;
+    var totalWax = tlmToWax + nbWax;
+    var WaxToEur = totalWax * nbWaxEUR;
+    let total = {
+        WaxToEur,
+        nbWax,
+        nbTlm
+    }
+    res.status(200).send({total: total});
+});
 
 router.get('/usernames', async (req, res) => {
         let users = await User.find({});
