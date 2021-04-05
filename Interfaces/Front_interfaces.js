@@ -8,7 +8,7 @@ router.get('/total', async (req, res) => {
     let nbWax = 0;
     let nbTlm = 0;
     console.log(req.query.username)
-    let user = await User.findOne({username : req.body.username});
+    let user = await User.findOne({username : req.query.username});
     for(const accName of user.accounts){
         let acc = await Account.findOne({name: accName});
         nbWax += parseFloat(acc.nbWAX);
