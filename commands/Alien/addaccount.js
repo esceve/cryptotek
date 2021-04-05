@@ -11,7 +11,6 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
                 .setColor("#92f058")
                 .setTimestamp();
     let accountsName = []
-    args = args.split(' ');
 
     for(const accountName of args){
         if(accountName.endsWith(".wam")) accountsName.push(accountName)
