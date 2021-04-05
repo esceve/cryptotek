@@ -28,7 +28,7 @@ router.get('/total', async (req, res) => {
 });
 
 router.get('/shitlist', async (req, res) => {
-    const users = await User.findOne({username : req.query.username});  
+    const user = await User.findOne({username : req.query.username});  
     let userAccounts = []
     for(const accName of user.accounts){
         let acc = await Account.findOne({name: accName});
