@@ -21,6 +21,15 @@ module.exports.run = async (client,message,args) => {
             for (const accName of user.accounts) {
                 i++;
                 let acc = await client.getAccount(accName);
+                if(!acc){
+                    
+                    await client.createAccount({
+                        username: message.member.user.tag,
+                        name: accName,
+                    });
+                    await client.isShitListed(accName)
+                    await client.updateBalance(accName,message.guild)
+                }
                 nbWax += parseFloat(acc.nbWAX);
                 nbTlm += parseFloat(acc.nbTLM);
                 if(i>24){
