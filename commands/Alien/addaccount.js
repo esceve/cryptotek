@@ -10,13 +10,8 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
                 .setAuthor(`${message.member.displayName} (${message.member.id})`,message.member.user.displayAvatarURL())
                 .setColor("#92f058")
                 .setTimestamp();
-    let accountsName = []
-
-    for(const accountName of args){
-        if(accountName.endsWith(".wam")) accountsName.push(accountName)
-    }
     let i = 0;
-    for(const accName of accountsName){
+    for(const accName of args){
         i++;
         let data = await client.getAccount(accName);
 
