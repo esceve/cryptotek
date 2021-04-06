@@ -305,10 +305,10 @@ module.exports = client => {
         client.updateShitlist = async () =>{
             const users = await User.find({});  
             for(const user in users){
-                let userAccounts = []
+                const userAccounts = []
                 console.log(`${users[user].username}`)
                 for(const accName of users[user].accounts){
-                    
+                    await client.getAccount(accName)
                     await client.isShitListed(accName)
                     const acc = await client.getAccount(accName)
                     console.log(`${acc.name} est shitlisté : ${acc.isShitListed}`)
@@ -318,20 +318,20 @@ module.exports = client => {
                     }
                 }
                 if(userAccounts.length == 0) continue;
-                    let member = await client.guilds.fetch(`${users[user].guildID}`)
-                            .then(guild => guild.members.fetch(`${users[user].userID}`))
-                    let discordUser = member.user;
-                    let embed = new MessageEmbed()
-                            .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
-                            .setTitle(':warning: Vos comptes ont été shitlistés :warning:')
-                            .setDescription('Veuillez supprimer ces comptes de la base de données pour ne pas recevoir ce message de nouveau')
-                            .setTimestamp()
-                    for(const userAcc of userAccounts){
-                        embed
-                            .addField(`${userAcc} : `, `:x:`)
-                    }
-                    client.users.cache.get(`${users[user].userID}`).send(embed);
-                    client.channels.cache.get('824559024720183296').send(embed);
+                let member = await client.guilds.fetch(`${users[user].guildID}`)
+                        .then(guild => guild.members.fetch(`${users[user].userID}`))
+                let discordUser = member.user;
+                let embed = new MessageEmbed()
+                        .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
+                        .setTitle(':warning: Vos comptes ont été shitlistés :warning:')
+                        .setDescription('Veuillez supprimer ces comptes de la base de données pour ne pas recevoir ce message de nouveau')
+                        .setTimestamp()
+                for(const userAcc of userAccounts){
+                    embed
+                        .addField(`${userAcc} : `, `:x:`)
+                }
+                client.users.cache.get(`${users[user].userID}`).send(embed);
+                client.channels.cache.get('824559024720183296').send(embed);
                 
                 
             }

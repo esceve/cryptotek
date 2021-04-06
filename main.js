@@ -48,7 +48,7 @@ setInterval(async () => {
    console.log("[INFO] Updating shitlist on account...");
    await bot.updateShitlist();
    console.log("Finish!");
-}, 10800000)
+}, 900000)
 
 setInterval(async () => {
    console.log("[INFO] Updating Balance bot...")
