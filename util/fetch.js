@@ -129,14 +129,18 @@ module.exports = client => {
                 "limit": 10
             },guild
         );
-        let exist = false;
-        if(datas.data.accountBalances.edges.length == 0){
-            exist = false;
-        } 
-        else{
-            exist = true;
-        }
-        return exist;
+        return datas.then( async data => {
+            let exist = false;
+            if(data.data.accountBalances.edges.length == 0){
+                exist = false;
+            } 
+            else{
+                exist = true;
+            }
+            return exist;
+        })
+
+
         
     }
     client.tlmPrice = async () => {
