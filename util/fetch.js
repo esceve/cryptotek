@@ -103,7 +103,7 @@ module.exports = client => {
 
     client.accountExist = async (acc,guild) => {
 
-        const datas = await client.queryFetch(
+        const datas = client.queryFetch(
             `
             query($account: String!, $limit: Uint32, $opts: [ACCOUNT_BALANCE_OPTION!]) {
                 accountBalances(account: $account,limit: $limit, options: $opts) {
