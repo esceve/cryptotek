@@ -4,7 +4,6 @@ const { loadCommands, loadEvents } = require("./util/loader");
 
 
 const http = require("http");
-const https = require("https");
 const express = require("express");
 const cors = require("cors");
 const apiInterfaces = require('./Interfaces/Front_interfaces');
@@ -20,30 +19,14 @@ bot.mongoose = require("./util/mongoose");
 
 
 //API IMPLEMENTATION
-
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/stonk.retrogala.ovh/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/stonk.retrogala.ovh/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/stonk.retrogala.ovh/chain.pem', 'utf8');
-
-const creditentials = {
-   key: privateKey,
-   cert: certificate,
-   ca: ca
-};
-
-const PORT = 80;
-const PORTHTTPS = 443;
+const PORT = 8081;
 const app = express();
 app.use(express.json());
-const httpServer= http.Server(app);
-const httpsServer = https.Server(creditentials, app);
+const server = http.Server(app);
 app.use(cors({ credentials: true, origin: true, exposedHeaders: ['x-auth-token'] }));
 app.use('/api', apiInterfaces);
 
-httpServer.listen(PORT, function () {
-  console.log(`Server running on port: ${PORT}`);
-});
-httpsServer.listen(PORT, function () {
+server.listen(PORT, function () {
   console.log(`Server running on port: ${PORT}`);
 });
 
