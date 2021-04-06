@@ -8,7 +8,8 @@ module.exports = client => {
    client.authentificationFetch= async (guild) =>{
         let data = await client.getGuild(guild);
         let token = data.jwtToken;
-        if(token == null || token.expired_at <= Date.now()){
+        const date = Math.floor((Date.now())/1000);
+        if(token == null || token.expires_at <= date - 86400){
             fetch("https://auth.eosnation.io/v1/auth/issue", {
                 method: "POST",
                 body: JSON.stringify({
