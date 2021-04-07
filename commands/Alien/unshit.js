@@ -22,9 +22,9 @@ module.exports.run = async (client,message,args,settings,dbUser) => {
         if(data){
             await client.updateAccount(accName, { isShitListed : false});
             if(i > 24){
-                embed2.addField(`Bot `, `${accName} a déjà été retiré de la shitlist`)
+                embed2.addField(`Bot `, `${accName} a été retiré de la shitlist`)
             }else{
-                embed.addField(`Bot `, `${accName} a déjà été retiré de la shitlist`)
+                embed.addField(`Bot `, `${accName} a été retiré de la shitlist`)
             }
             
         }else { // Cas où le compte n'a pas été créé
