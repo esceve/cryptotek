@@ -255,7 +255,11 @@ module.exports = client => {
                         case 'Abundant':
                             break;
                         case 'Common':
-                            break;    
+                            embed
+                                .setColor("#222222")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
+                            break;   
                         case 'Rare':
                             embed
                                 .setColor("#3998d8")
