@@ -1,6 +1,6 @@
 const { MESSAGES } = require("../../util/constants");
 const {MessageEmbed} = require('discord.js');
-module.exports.run = (client,message,args) => {
+module.exports.run = async (client,message,args) => {
    await client.showLastNFTs();
 };
 
