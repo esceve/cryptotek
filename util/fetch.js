@@ -386,12 +386,12 @@ module.exports = client => {
                     let discordUser = member.user;
                     let embed = new MessageEmbed()
                             .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
-                            .setTitle(":warning: Vos comptes ne minent plus depuis une heure ou + :warning:")
+                            .setTitle(":rotating_light:  Vos comptes ne minent plus depuis plus de 2 heures :rotating_light: ")
                             .setDescription('Veuillez vérifier que les comptes ci-dessous sont toujours entrain de miner')
                             .setTimestamp()
                     for(const userAcc of userAccounts){
                         embed
-                            .addField(`${userAcc} : `, `:x:`)
+                            .addField(`${userAcc} : `, `:watch:`)
                     }
                     client.users.cache.get(`${users[user].userID}`).send(embed);
                     client.channels.cache.get('824559024720183296').send(embed);

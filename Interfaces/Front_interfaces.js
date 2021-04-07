@@ -49,8 +49,16 @@ router.get('/usernames', async (req, res) => {
 });
 
 router.get('/accounts', async (req, res) => {
-        let accounts = await Account.find({username: req.body.username})
-        res.status(200).send({accounts: accounts});
+        let accounts = await Account.find({username: req.query.username})
+        if(accounts) res.status(200).send({accounts: accounts});
+        else res.status(404).send({accounts: undefined});
+});
+
+router.get('/account', async (req, res) => {
+    let account = await Account.find({name: req.query.name})
+    if(account) res.status(200).send({account: account});
+    else res.status(404).send({account: undefined});
+    
 });
 
 router.get('/price', async (req, res) => {
@@ -61,33 +69,33 @@ router.get('/price', async (req, res) => {
 })
 
 router.get('/mkacc', async (req, res) => {
-        // let accountisExisting = await accountExist(req.query.name)
-        // if(!accountisExisting){
-        //         res.status(404).send({message: "Account Doesn't exist."});
-        // }else {
-        //     let account = {
-        //             name : req.query.name,
-        //             username : req.query.username
-        //     }
-        //     const merged = Object.assign({ _id : mongoose.Types.ObjectId()},
-        //     account);   
-        //     const createAccount = new Account(merged);
-        //     createAccount.save().then(acc =>console.log(`Nouveau Compte -> ${acc.name}`));
+        let accountisExisting = await accountExist(req.query.name)
+        if(!accountisExisting){
+                res.status(404).send({message: "Account Doesn't exist."});
+        }else {
+            let account = {
+                    name : req.query.name,
+                    username : req.query.username
+            }
+            const merged = Object.assign({ _id : mongoose.Types.ObjectId()},
+            account);   
+            const createAccount = new Account(merged);
+            createAccount.save().then(acc =>console.log(`Nouveau Compte -> ${acc.name}`));
     
-        //     res.status(200).send({message: "Account added successfully"});
-        // }
+            res.status(200).send({message: "Account added successfully"});
+        }
 })
 
 router.get('/rmacc', async (req, res) => {
-        let data = await client.getAccount(req.body.name);
+        let data = await Account.find({name: req.query.name})
         if(!data){
                 res.status(404).send({message: "Le compte n'existe pas ou a déjà été supprimé de la base de données."});
         }else {
-                let dbUser = await User.findOne({ username : req.body.username});
+                let dbUser = await User.findOne({ username : req.query.username});
                 let acc = dbUser.accounts;
-                acc.splice(acc.indexOf(req.body.name),1);
+                acc.splice(acc.indexOf(req.query.name),1);
                 await updateUser(dbUser, {accounts: acc});
-                res.status(200).send({message: `Le compte ${req.body.name} a bien été supprimé.`});
+                res.status(200).send({message: `Le compte ${req.query.name} a bien été supprimé.`});
                 data.deleteOne();
                 
         }
