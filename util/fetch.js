@@ -103,7 +103,7 @@ module.exports = client => {
 
     client.accountExist = async (acc,guild) => {
 
-        const datas = client.queryFetch(
+        const datas = await client.queryFetch(
             `
             query($account: String!, $limit: Uint32, $opts: [ACCOUNT_BALANCE_OPTION!]) {
                 accountBalances(account: $account,limit: $limit, options: $opts) {
@@ -129,19 +129,15 @@ module.exports = client => {
                 "limit": 10
             },guild
         );
-        return datas.then( async data => {
-            let exist = false;
-            if(data.data.accountBalances.edges.length == 0){
-                exist = false;
-            } 
-            else{
-                exist = true;
-            }
-            return exist;
-        })
+        let exist = false;
+        if(datas.data.accountBalances.edges.length == 0){
+            exist = false;
+        } 
+        else{
+            exist = true;
+        }
+        return exist;
 
-
-        
     }
     client.tlmPrice = async () => {
         return await axios
@@ -171,7 +167,7 @@ module.exports = client => {
 
     client.isShitListed = async accName => {
         
-        let url = `https://wax.pink.gg/v2/history/get_actions?account=${accName}&skip=0&limit=1&sort=desc&transfer.to=${accName}`
+        let url = `https://wax.eosusa.news/v2/history/get_actions?account=${accName}&limit=1&skip=0&filter=*:transfer&transfer.to=${accName}`
         await fetch(url)
             .then(res => res.json())
             .then(async json => {
@@ -343,7 +339,7 @@ module.exports = client => {
         }
 
         client.dontMint = async (accName) =>{
-            let url = `https://wax.pink.gg/v2/history/get_actions?account=${accName}&skip=0&limit=1&sort=desc&transfer.to=${accName}`
+            let url = `https://wax.eosusa.news/v2/history/get_actions?account=${accName}&limit=1&skip=0&filter=*:transfer&transfer.to=${accName}`
             if (await fetch(url)
             .then(res => res.json())
             .then(async json => {

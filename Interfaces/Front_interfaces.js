@@ -61,20 +61,21 @@ router.get('/price', async (req, res) => {
 })
 
 router.get('/mkacc', async (req, res) => {
-        if(!accountExist(req.query.name)){
-                res.status(404).send({message: "Account Doesn't exist."});
-        }else {
-            let account = {
-                    name : req.query.name,
-                    username : req.query.username
-            }
-            const merged = Object.assign({ _id : mongoose.Types.ObjectId()},
-            account);   
-            const createAccount = new Account(merged);
-            createAccount.save().then(acc =>console.log(`Nouveau Compte -> ${acc.name}`));
+        // let accountisExisting = await accountExist(req.query.name)
+        // if(!accountisExisting){
+        //         res.status(404).send({message: "Account Doesn't exist."});
+        // }else {
+        //     let account = {
+        //             name : req.query.name,
+        //             username : req.query.username
+        //     }
+        //     const merged = Object.assign({ _id : mongoose.Types.ObjectId()},
+        //     account);   
+        //     const createAccount = new Account(merged);
+        //     createAccount.save().then(acc =>console.log(`Nouveau Compte -> ${acc.name}`));
     
-            res.status(200).send({message: "Account added successfully"});
-        }
+        //     res.status(200).send({message: "Account added successfully"});
+        // }
 })
 
 router.get('/rmacc', async (req, res) => {
