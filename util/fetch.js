@@ -9,8 +9,9 @@ module.exports = client => {
         let data = await client.getGuild(guild);
         let token = data.jwtToken;
         const date = Math.floor((Date.now())/1000);
-        if(token == null || token.expires_at <= date - 86400){
-            fetch("https://auth.eosnation.io/v1/auth/issue", {
+        if(token == "MongooseDocument { null }" || token.expires_at <= date - 86400){
+            console.log("je suis ici")
+            var newToken = await fetch("https://auth.eosnation.io/v1/auth/issue", {
                 method: "POST",
                 body: JSON.stringify({
                 api_key: process.env.APIKEY
@@ -21,19 +22,20 @@ module.exports = client => {
             })
             .then(res => res.json())
             .then( async jwt => {
-                await client.updateGuild(guild, { jwtToken : jwt});
-            }) // Cache JWT (for up to 24 hours)
+                return jwt
+            })
+            await client.updateGuild(guild, { jwtToken : newToken});
+            return newToken; // Cache JWT (for up to 24 hours)
         }
-        
-    }   
+
+   }
     client.queryFetch = async (query,variables,guild) =>{
-        await client.authentificationFetch(guild);
-        let g = await client.getGuild(guild);
+        var token = await client.authentificationFetch(guild);
         return  fetch('https://wax.dfuse.eosnation.io/graphql', {
           method :'POST',
           headers : {
               'Content-Type': 'application/json',
-              'Authorization' : `Bearer ${g.jwtToken.token}`,
+              'Authorization' : `Bearer ${token}`,
               'Accept': 'application/json'
             },
           body : JSON.stringify({
