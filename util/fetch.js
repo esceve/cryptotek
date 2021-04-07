@@ -25,9 +25,9 @@ module.exports = client => {
                 return jwt
             })
             await client.updateGuild(guild, { jwtToken : newToken});
-            return newToken; // Cache JWT (for up to 24 hours)
+            return newToken.token; // Cache JWT (for up to 24 hours)
         }
-
+        return token.token;
    }
     client.queryFetch = async (query,variables,guild) =>{
         var token = await client.authentificationFetch(guild);
