@@ -195,7 +195,7 @@ module.exports = client => {
                 const data = json.data[0].data;
                 const timeNFT = Math.floor((json.data[0].minted_at_time)/1000);
                 const date = Math.floor((Date.now())/1000);
-                if ( (timeNFT > date - 600)) { //Tout est en secondes
+                if ( (timeNFT > date - 420)) { //Tout est en secondes
                     const price = await client.getNFTPrice(json.data[0].asset_id)
                     let nft = {
                         id: json.data[0].asset_id,
