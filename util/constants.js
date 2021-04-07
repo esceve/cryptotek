@@ -126,6 +126,16 @@ const MESSAGES = {
                 cooldown : 2
 
             },
+            UNSHIT : {
+                name : 'unshit',
+                aliases : ['unshit'],
+                category : 'alien',
+                description : "Enlève un compte AlienWorlds de la shitlist",
+                args: true,
+                usage : '<@nom_du_compte.wam>',
+                cooldown : 2
+
+            },
             REMOVEACCOUNT : {
                 name : 'removeaccount',
                 aliases : ['removeaccount', 'rmacc'],
