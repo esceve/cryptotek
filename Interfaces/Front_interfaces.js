@@ -141,6 +141,7 @@ router.get('/leaderboard', async (req, res) => {
     var i = 0;
     for (const user in usersLeadboard) {
         leaderboard.push({
+            position : i,
             username : usersLeadboard[user].username,
             wax : usersLeadboard[user].wax.toFixed(2),
             tlm : usersLeadboard[user].tlm.toFixed(2),
