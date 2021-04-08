@@ -55,7 +55,7 @@ router.get('/accounts', async (req, res) => {
 });
 
 router.get('/account', async (req, res) => {
-    let account = await Account.find({name: req.query.name})
+    let account = await Account.findOne({name: req.query.name})
     if(account) res.status(200).send({account: account});
     else res.status(404).send({account: undefined});
     
@@ -87,7 +87,7 @@ router.get('/mkacc', async (req, res) => {
 })
 
 router.get('/rmacc', async (req, res) => {
-        let data = await Account.find({name: req.query.name})
+        let data = await Account.findOne({name: req.query.name})
         if(!data){
                 res.status(404).send({message: "Le compte n'existe pas ou a déjà été supprimé de la base de données."});
         }else {
@@ -106,18 +106,16 @@ router.get('/leaderboard', async (req, res) => {
     let users = await User.find({});
     let usersLeadboard = [];
     var leaderboard = [];
-    console.log('Je suis dans leaderboard')
-
+    var nbWaxEUR = await waxPrice();
+    var nbTlmEUR = await tlmPrice();
     for (const user in users) {
         let nbWax = 0;
         let nbTlm = 0;
         for(const accName of users[user].accounts){
-            let acc = await Account.find({name: accName})
+            let acc = await Account.findOne({name: accName});
             nbWax += parseFloat(acc.nbWAX);
             nbTlm += parseFloat(acc.nbTLM);
         }
-        let nbWaxEUR = await waxPrice();
-        let nbTlmEUR = await tlmPrice();
         var tlmToWax = nbTlm * nbTlmEUR;
         var totalWax = tlmToWax + nbWax;
         var WaxToEur = totalWax * nbWaxEUR;
