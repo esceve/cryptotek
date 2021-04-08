@@ -107,8 +107,8 @@ router.get('/leaderboard', async (req, res) => {
     let usersLeadboard = [];
     var leaderboard = [];
     console.log('Je suis dans leaderboard')
-    var nbWaxEUR = getTlmPrice();
-    var nbTlmEUR = getWaxPrice();
+    var nbWaxEUR = await client.waxPrice();
+    var nbTlmEUR = await client.tlmPrice();
     for (const user in users) {
         let nbWax = 0;
         let nbTlm = 0;
@@ -288,7 +288,31 @@ const getTlmPrice = async () => {
             
         }
     
-
+        const tlmPrice = async () => {
+            return await axios
+            .get("https://wax.alcor.exchange/api/markets")
+                .then(res => {
+                    var currencies = res.data
+                    var tlmCurrencies = 0;
+                    for (item in currencies) {
+                        if(currencies[item].id == undefined) continue;
+                        if (currencies[item].id == 26) {
+                            tlmCurrencies = currencies[item].last_price;
+                        }
+                    }
+                return tlmCurrencies;
+             }
+            )
+        }
+        
+        const waxPrice = async () => {
+            return await axios
+            .get("https://api.coingecko.com/api/v3/simple/price?ids=wax&vs_currencies=EUR")
+            .then(res => {
+                    return res.data.wax.eur
+             }
+            )
+        }
 // GET USERNAME
 
 // get account by username
