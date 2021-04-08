@@ -102,6 +102,55 @@ router.get('/rmacc', async (req, res) => {
        
 })
 
+router.get('/leaderboard', async (req, res) => {
+    let users = await User.find({});
+    let usersLeadboard = [];
+    let leaderboard = [];
+    for (const user in users) {
+        let nbWax = 0;
+        let nbTlm = 0;
+        for(const accName of users[user].accounts){
+            let acc = await Account.find({name: accName})
+            nbWax += parseFloat(acc.nbWAX);
+            nbTlm += parseFloat(acc.nbTLM);
+        }
+        let nbWaxEUR = await getTlmPrice();
+        let nbTlmEUR = await getWaxPrice();
+        var tlmToWax = nbTlm * nbTlmEUR;
+        var totalWax = tlmToWax + nbWax;
+        var WaxToEur = totalWax * nbWaxEUR;
+        if (users[user].accounts.length > 0 ) {
+            usersLeadboard.push({
+                username: users[user].username,
+                nbrAccount: users[user].accounts.length,
+                wax: nbWax,
+                tlm: nbTlm,
+                eur: WaxToEur
+            })
+        }
+    }
+    usersLeadboard.sort(function (a, b) {
+        if ( a.eur < b.eur ){
+            return 1;
+        }
+        if ( a.eur > b.eur ){
+            return -1;
+        }
+        return 0
+    })
+    var i = 0;
+    for (const user in usersLeadboard) {
+        leaderboard.push({
+            username : usersLeadboard[user].username,
+            wax : usersLeadboard[user].wax.toFixed(2),
+            tlm : usersLeadboard[user].tlm.toFixed(2),
+            eur : usersLeadboard[user].eur.toFixed(2),
+            nbrAccount : usersLeadboard[user].nbrAccount
+        })
+            i++;
+    }
+})
+
 
 
 const getTlmPrice = async () => {
