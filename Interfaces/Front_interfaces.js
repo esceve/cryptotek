@@ -106,6 +106,7 @@ router.get('/leaderboard', async (req, res) => {
     let users = await User.find({});
     let usersLeadboard = [];
     var leaderboard = [];
+    console.log('Je suis dans leaderboard')
     for (const user in users) {
         let nbWax = 0;
         let nbTlm = 0;
@@ -149,7 +150,10 @@ router.get('/leaderboard', async (req, res) => {
         })
             i++;
     }
-    res.status(200).send({leaderboard: leaderboard});
+    console.log(leaderboard)
+    if(leaderboard)  res.status(200).send({leaderboard: leaderboard});
+    else res.status(404).send({message: "Probleme avec leaderboard"});
+   
 })
 
 
