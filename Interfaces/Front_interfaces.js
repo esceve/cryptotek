@@ -300,7 +300,7 @@ const getTlmPrice = async () => {
                             tlmCurrencies = currencies[item].last_price;
                         }
                     }
-                return tlmCurrencies;
+                return tlmCurrencies; 
              }
             )
         }
