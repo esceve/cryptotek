@@ -105,7 +105,7 @@ router.get('/rmacc', async (req, res) => {
 router.get('/leaderboard', async (req, res) => {
     let users = await User.find({});
     let usersLeadboard = [];
-    let leaderboard = [];
+    var leaderboard = [];
     for (const user in users) {
         let nbWax = 0;
         let nbTlm = 0;
@@ -149,6 +149,7 @@ router.get('/leaderboard', async (req, res) => {
         })
             i++;
     }
+    res.status(200).send({leaderboard: leaderboard});
 })
 
 
