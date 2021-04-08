@@ -54,7 +54,7 @@ setInterval(async () => {
    console.log("[INFO] Updating Balance bot...")
    await bot.updateAllBalances();
    console.log("Finish!");
-}, 420000)
+}, 120000)//420000
 
 setInterval( async () =>{
    console.log("[INFO] Updating stuck bot warning...")
