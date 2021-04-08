@@ -107,8 +107,7 @@ router.get('/leaderboard', async (req, res) => {
     let usersLeadboard = [];
     var leaderboard = [];
     console.log('Je suis dans leaderboard')
-    var nbWaxEUR = await waxPrice();
-    var nbTlmEUR = await tlmPrice();
+
     for (const user in users) {
         let nbWax = 0;
         let nbTlm = 0;
@@ -117,7 +116,8 @@ router.get('/leaderboard', async (req, res) => {
             nbWax += parseFloat(acc.nbWAX);
             nbTlm += parseFloat(acc.nbTLM);
         }
-
+        let nbWaxEUR = await waxPrice();
+        let nbTlmEUR = await tlmPrice();
         var tlmToWax = nbTlm * nbTlmEUR;
         var totalWax = tlmToWax + nbWax;
         var WaxToEur = totalWax * nbWaxEUR;
