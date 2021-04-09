@@ -42,7 +42,7 @@ setInterval(async () => {
    console.log("[INFO] Updating last drop NTF's...");
    await bot.showLastNFTs();
    console.log("Finish!");
-},420000)
+},580000)
 
 setInterval(async () => {
    console.log("[INFO] Updating shitlist on account...");
