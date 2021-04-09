@@ -195,7 +195,7 @@ module.exports = client => {
                 const data = json.data[0].data;
                 const timeNFT = Math.floor((json.data[0].minted_at_time)/1000);
                 const date = Math.floor((Date.now())/1000);
-                if ( (timeNFT > date - 420)) { //Tout est en secondes
+                if ( (timeNFT > date - 3600)) { //Tout est en secondes
                     const price = await client.getNFTPrice(json.data[0].asset_id)
                     let nft = {
                         id: json.data[0].asset_id,
@@ -346,7 +346,7 @@ module.exports = client => {
 
         client.dontMint = async (accName) =>{
             let url = `https://wax.eosusa.news/v2/history/get_actions?account=${accName}&limit=1&skip=0&filter=*:transfer&transfer.to=${accName}`
-            if (await fetch(url)
+            return await fetch(url)
             .then(res => res.json())
             .then(async json => {
                 if(!json.actions[0]) return;
@@ -355,21 +355,20 @@ module.exports = client => {
                     let annee = temps.slice(0,4)
                     let mois = temps.slice(5,7)
                     let jour = temps.slice(8,10)
-                    let heure = temps.slice(11,13)
+                    let heure = temps.slice(11,13) - 1
                     let minutes = temps.slice(14,16)
                     let secondes = temps.slice(17,19)
                     let ms = temps.slice(20)
                     const datenow = Date.now()
                     const date = new Date();
-                    date.setHours(parseInt(heure),parseInt(minutes),parseInt(secondes),parseInt(ms))
-                    date.setFullYear(annee,mois -1 ,jour)                 
+                    date.setHours(parseInt(heure) +3,parseInt(minutes),parseInt(secondes),parseInt(ms))
+                    date.setFullYear(annee,mois -1 ,jour)
+                    let ilyadeuxheures = datenow - 7200000
+                    console.log('La date du dernier mine ' + date.getTime())                 
                     if (data.memo == "ALIEN WORLDS - Mined Trilium"){
-                        if (date.getTime() < datenow - 7200000){
-                            return true;
-                        }else return false;
+                        return date.getTime() < ilyadeuxheures
                     }
-            })) return true
-            else return false
+            })
         }
         client.updateDontMint = async () =>{
             const users = await User.find({});  
@@ -379,6 +378,7 @@ module.exports = client => {
                 for(const accName of users[user].accounts){
                     
                     let isDontMint = await client.dontMint(accName)
+                    console.log("isDontMint :" + isDontMint)
                     const acc = await client.getAccount(accName)
                     console.log(`${acc.name} ne mine plus : ${isDontMint}`)
                     if (isDontMint) {
@@ -399,8 +399,8 @@ module.exports = client => {
                         embed
                             .addField(`${userAcc} : `, `:watch:`)
                     }
-                    client.users.cache.get(`${users[user].userID}`).send(embed);
-                    client.channels.cache.get('824559024720183296').send(embed);
+                    // client.users.cache.get(`${users[user].userID}`).send(embed);
+                    // client.channels.cache.get('824559024720183296').send(embed);
                 
             }
         }
