@@ -248,7 +248,7 @@ module.exports = client => {
                         .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
                         .setTitle(nft.name)
                         .setImage(nft.img)
-                        .setTimestamp(nft.created_at_time)
+                        .setTimestamp(date.getTime())
                         .addField(`Prix : `, `Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
                         .addField(`Date: `, `NFT drop le : ${date}`)
                         .addField('Par : ', `${discordUser.username} avec le compte ${nft.username}`)
