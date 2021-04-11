@@ -102,6 +102,37 @@ router.get('/rmacc', async (req, res) => {
        
 })
 
+router.get('/shownfts', async (req, res) => {
+        let user = await User.findOne({username : req.query.username})
+        var nfts = []
+        for(const accName of user.accounts){
+            let url = `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${accName}&page=1&limit=1000&order=desc&sort=minted`
+            await fetch(url)
+            .then(res => res.json())
+            .then(async json => {
+                if (!json.data.length) return;
+                for(let i = 0; i < json.data.length ; i++){
+                    const data = json.data[i].data;
+                    const timeNFT = Math.floor((json.data[i].minted_at_time)/1000);
+                    const price = await getNFTPrice(json.data[i].asset_id)
+                    let nft = {
+                        id: json.data[i].asset_id,
+                        created_at_time: timeNFT,
+                        name: data.name,
+                        rarity: data.rarity,
+                        img: `https://cloudflare-ipfs.com/ipfs/${data.img}`,
+                        avg_price: `${price.avg_eur} EUR`,
+                        last_sold_eur: `${price.last_sold_eur} EUR`,
+                        username : accName
+                    }
+                    nfts.push(nft)
+                }
+            })
+        }
+        res.status(200).send({nfts : nfts})
+
+})
+
 router.get('/leaderboard', async (req, res) => {
     let users = await User.find({});
     let usersLeadboard = [];
@@ -155,8 +186,20 @@ router.get('/leaderboard', async (req, res) => {
     else res.status(404).send({message: "Probleme avec leaderboard"});
    
 })
-
-
+const getNFTPrice = async nftid => {
+    let url = `https://www.nfthive.io/api/price-info/${nftid}`
+    const price = await fetch(url)
+        .then(res => res.json())
+        .then(async json => {
+            let waxeur = await client.waxPrice();
+            let prices = {
+                avg_eur : parseFloat(json.average)*waxeur,
+                last_sold_eur : parseFloat(json.last_sold_usd)
+            }
+            return prices
+        })
+    return price;
+  }
 
 const getTlmPrice = async () => {
         return axios
