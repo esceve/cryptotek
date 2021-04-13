@@ -8,7 +8,6 @@ module.exports = client => {
    client.authentificationFetch= async (guild) =>{
         let data = await client.getGuild(guild);
         let token = data.jwtToken;
-        console.log(`Je suis le token ${token}`)
         const date = Math.floor((Date.now())/1000);
         if(token == "MongooseDocument { null }" || token.expires_at < date){
             var newToken = await fetch("https://auth.eosnation.io/v1/auth/issue", {
@@ -48,8 +47,8 @@ module.exports = client => {
            const data = await response.json();
            return data;
          } catch(error) {
-           //console.log('Error happened here!')
-           //console.error(error)
+           console.log('Error happened in QueryFetch!')
+           console.error(error)
          }
         })
       
