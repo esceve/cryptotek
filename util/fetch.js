@@ -168,6 +168,14 @@ module.exports = client => {
          }
         )
     }
+    client.tlmeurPrice = async () => {
+        return await axios
+        .get("https://api.coingecko.com/api/v3/simple/price?ids=alien-worlds&vs_currencies=EUR")
+        .then(res => {
+                return res.data.alien-worlds.eur
+         }
+        )
+    }
 
     client.isShitListed = async accName => {
         
