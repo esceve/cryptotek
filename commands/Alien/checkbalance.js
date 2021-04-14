@@ -52,16 +52,16 @@ module.exports.run = async (client,message,args) => {
             }
         }
         let nbWaxEUR = await client.waxPrice();
-        let nbTlmEUR = await client.tlmPrice();
-        var tlmToWax = nbTlm * nbTlmEUR;
-        var totalWax = tlmToWax + nbWax;
-        var WaxToEur = totalWax * nbWaxEUR;
+        let nbTlmEUR = await client.tlmeurPrice();
+        var tlmToEUr = nbTlm * nbTlmEUR;
+        var WaxToEur = nbWax * nbWaxEUR;
+        var EurTot = tlmToEUr + WaxToEur;
         if(i>24){
-            embed2.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
+            embed2.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${EurTot} EUR`)
         }else if(i>48){
-            embed3.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
+            embed3.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${EurTot} EUR`)
         }else if(i<=24){
-            embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
+            embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${EurTot} EUR`)
         }
         client.users.cache.get(message.member.user.id).send(embed);
         if(i>24) client.users.cache.get(message.member.user.id).send(embed2);
