@@ -13,6 +13,8 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
 
     let users = await User.find({});
     let usersLeadboard = [];
+    var nbWaxEUR = await client.waxPrice();
+    var nbTlmEUR = await client.tlmPrice();
     for (const user in users) {
         let nbWax = 0;
         let nbTlm = 0;
@@ -21,8 +23,7 @@ module.exports.run = async (client, message, args,settings,dbUser) => {
             nbWax += parseFloat(acc.nbWAX);
             nbTlm += parseFloat(acc.nbTLM);
         }
-        let nbWaxEUR = await client.waxPrice();
-        let nbTlmEUR = await client.tlmPrice();
+
         var tlmToWax = nbTlm * nbTlmEUR;
         var totalWax = tlmToWax + nbWax;
         var WaxToEur = totalWax * nbWaxEUR;

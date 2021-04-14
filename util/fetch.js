@@ -9,8 +9,8 @@ module.exports = client => {
         let data = await client.getGuild(guild);
         let token = data.jwtToken;
         const date = Math.floor((Date.now())/1000);
-        if(token == null || token.expires_at <= date - 86400){
-            fetch("https://auth.eosnation.io/v1/auth/issue", {
+        if(token == "MongooseDocument { null }" || token.expires_at < date){
+            var newToken = await fetch("https://auth.eosnation.io/v1/auth/issue", {
                 method: "POST",
                 body: JSON.stringify({
                 api_key: process.env.APIKEY
@@ -21,19 +21,20 @@ module.exports = client => {
             })
             .then(res => res.json())
             .then( async jwt => {
-                await client.updateGuild(guild, { jwtToken : jwt});
-            }) // Cache JWT (for up to 24 hours)
+                return jwt
+            })
+            await client.updateGuild(guild, { jwtToken : newToken});
+            return newToken.token; // Cache JWT (for up to 24 hours)
         }
-        
-    }   
+        return token.token;
+   }
     client.queryFetch = async (query,variables,guild) =>{
-        await client.authentificationFetch(guild);
-        let g = await client.getGuild(guild);
+        var token = await client.authentificationFetch(guild);
         return  fetch('https://wax.dfuse.eosnation.io/graphql', {
           method :'POST',
           headers : {
               'Content-Type': 'application/json',
-              'Authorization' : `Bearer ${g.jwtToken.token}`,
+              'Authorization' : `Bearer ${token}`,
               'Accept': 'application/json'
             },
           body : JSON.stringify({
@@ -46,8 +47,8 @@ module.exports = client => {
            const data = await response.json();
            return data;
          } catch(error) {
-           //console.log('Error happened here!')
-           //console.error(error)
+           console.log('Error happened in QueryFetch!')
+           console.error(error)
          }
         })
       
@@ -103,7 +104,7 @@ module.exports = client => {
 
     client.accountExist = async (acc,guild) => {
 
-        const datas = client.queryFetch(
+        const datas = await client.queryFetch(
             `
             query($account: String!, $limit: Uint32, $opts: [ACCOUNT_BALANCE_OPTION!]) {
                 accountBalances(account: $account,limit: $limit, options: $opts) {
@@ -129,19 +130,15 @@ module.exports = client => {
                 "limit": 10
             },guild
         );
-        return datas.then( async data => {
-            let exist = false;
-            if(data.data.accountBalances.edges.length == 0){
-                exist = false;
-            } 
-            else{
-                exist = true;
-            }
-            return exist;
-        })
+        let exist = false;
+        if(datas.data.accountBalances.edges.length == 0){
+            exist = false;
+        } 
+        else{
+            exist = true;
+        }
+        return exist;
 
-
-        
     }
     client.tlmPrice = async () => {
         return await axios
@@ -179,7 +176,7 @@ module.exports = client => {
 
     client.isShitListed = async accName => {
         
-        let url = `https://wax.pink.gg/v2/history/get_actions?account=${accName}&skip=0&limit=1&sort=desc&transfer.to=${accName}`
+        let url = `https://wax.eosusa.news/v2/history/get_actions?account=${accName}&limit=1&skip=0&filter=*:transfer&transfer.to=${accName}`
         await fetch(url)
             .then(res => res.json())
             .then(async json => {
@@ -205,7 +202,9 @@ module.exports = client => {
                 const data = json.data[0].data;
                 const timeNFT = Math.floor((json.data[0].minted_at_time)/1000);
                 const date = Math.floor((Date.now())/1000);
-                if ( (timeNFT > date - 600)) { //Tout est en secondes
+                console.log('Temps NFT ' + timeNFT)
+                let ilyauneheure = date - 600
+                if ( (timeNFT > ilyauneheure)) { //Tout est en secondes
                     const price = await client.getNFTPrice(json.data[0].asset_id)
                     let nft = {
                         id: json.data[0].asset_id,
@@ -256,7 +255,7 @@ module.exports = client => {
                         .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
                         .setTitle(nft.name)
                         .setImage(nft.img)
-                        .setTimestamp(nft.created_at_time)
+                        .setTimestamp(date.getTime())
                         .addField(`Prix : `, `Vendu en moyenne : ${nft.avg_price}\nDernier vendu à : ${nft.last_sold_eur}`)
                         .addField(`Date: `, `NFT drop le : ${date}`)
                         .addField('Par : ', `${discordUser.username} avec le compte ${nft.username}`)
@@ -265,7 +264,11 @@ module.exports = client => {
                         case 'Abundant':
                             break;
                         case 'Common':
-                            break;    
+                            embed
+                                .setColor("#222222")
+                            client.channels.cache.get('824559024720183296').send(embed);
+                            client.users.cache.get(users[user].userID).send(embed);
+                            break;   
                         case 'Rare':
                             embed
                                 .setColor("#3998d8")
@@ -351,8 +354,8 @@ module.exports = client => {
         }
 
         client.dontMint = async (accName) =>{
-            let url = `https://wax.pink.gg/v2/history/get_actions?account=${accName}&skip=0&limit=1&sort=desc&transfer.to=${accName}`
-            if (await fetch(url)
+            let url = `https://wax.eosusa.news/v2/history/get_actions?account=${accName}&limit=1&skip=0&filter=*:transfer&transfer.to=${accName}`
+            return await fetch(url)
             .then(res => res.json())
             .then(async json => {
                 if(!json.actions[0]) return;
@@ -361,21 +364,20 @@ module.exports = client => {
                     let annee = temps.slice(0,4)
                     let mois = temps.slice(5,7)
                     let jour = temps.slice(8,10)
-                    let heure = temps.slice(11,13)
+                    let heure = temps.slice(11,13) - 1
                     let minutes = temps.slice(14,16)
                     let secondes = temps.slice(17,19)
                     let ms = temps.slice(20)
                     const datenow = Date.now()
                     const date = new Date();
-                    date.setHours(parseInt(heure),parseInt(minutes),parseInt(secondes),parseInt(ms))
-                    date.setFullYear(annee,mois -1 ,jour)                 
+                    date.setHours(parseInt(heure) +3,parseInt(minutes),parseInt(secondes),parseInt(ms))
+                    date.setFullYear(annee,mois -1 ,jour)
+                    let ilyadeuxheures = datenow - 7200000
+                    console.log('La date du dernier mine ' + date.getTime())                 
                     if (data.memo == "ALIEN WORLDS - Mined Trilium"){
-                        if (date.getTime() < datenow - 7200000){
-                            return true;
-                        }else return false;
+                        return date.getTime() < ilyadeuxheures
                     }
-            })) return true
-            else return false
+            })
         }
         client.updateDontMint = async () =>{
             const users = await User.find({});  
@@ -385,6 +387,7 @@ module.exports = client => {
                 for(const accName of users[user].accounts){
                     
                     let isDontMint = await client.dontMint(accName)
+                    console.log("isDontMint :" + isDontMint)
                     const acc = await client.getAccount(accName)
                     console.log(`${acc.name} ne mine plus : ${isDontMint}`)
                     if (isDontMint) {
@@ -398,15 +401,15 @@ module.exports = client => {
                     let discordUser = member.user;
                     let embed = new MessageEmbed()
                             .setAuthor(`${discordUser.username}`, `${discordUser.displayAvatarURL()}`)
-                            .setTitle(":warning: Vos comptes ne minent plus depuis une heure ou + :warning:")
+                            .setTitle(":rotating_light:  Vos comptes ne minent plus depuis plus de 2 heures :rotating_light: ")
                             .setDescription('Veuillez vérifier que les comptes ci-dessous sont toujours entrain de miner')
                             .setTimestamp()
                     for(const userAcc of userAccounts){
                         embed
-                            .addField(`${userAcc} : `, `:x:`)
+                            .addField(`${userAcc} : `, `:watch:`)
                     }
-                    client.users.cache.get(`${users[user].userID}`).send(embed);
-                    client.channels.cache.get('824559024720183296').send(embed);
+                    // client.users.cache.get(`${users[user].userID}`).send(embed);
+                    // client.channels.cache.get('824559024720183296').send(embed);
                 
             }
         }

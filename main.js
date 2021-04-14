@@ -42,19 +42,19 @@ setInterval(async () => {
    console.log("[INFO] Updating last drop NTF's...");
    await bot.showLastNFTs();
    console.log("Finish!");
-},600000)
+},580000)
 
 setInterval(async () => {
    console.log("[INFO] Updating shitlist on account...");
    await bot.updateShitlist();
    console.log("Finish!");
-}, 900000)
+}, 1800000)
 
 setInterval(async () => {
    console.log("[INFO] Updating Balance bot...")
    await bot.updateAllBalances();
    console.log("Finish!");
-}, 420000)
+}, 120000)//420000
 
 setInterval( async () =>{
    console.log("[INFO] Updating stuck bot warning...")

@@ -49,8 +49,16 @@ router.get('/usernames', async (req, res) => {
 });
 
 router.get('/accounts', async (req, res) => {
-        let accounts = await Account.find({username: req.body.username})
-        res.status(200).send({accounts: accounts});
+        let accounts = await Account.find({username: req.query.username})
+        if(accounts) res.status(200).send({accounts: accounts});
+        else res.status(404).send({accounts: undefined});
+});
+
+router.get('/account', async (req, res) => {
+    let account = await Account.findOne({name: req.query.name})
+    if(account) res.status(200).send({account: account});
+    else res.status(404).send({account: undefined});
+    
 });
 
 router.get('/price', async (req, res) => {
@@ -61,7 +69,8 @@ router.get('/price', async (req, res) => {
 })
 
 router.get('/mkacc', async (req, res) => {
-        if(!accountExist(req.query.name)){
+        let accountisExisting = await accountExist(req.query.name)
+        if(!accountisExisting){
                 res.status(404).send({message: "Account Doesn't exist."});
         }else {
             let account = {
@@ -78,22 +87,119 @@ router.get('/mkacc', async (req, res) => {
 })
 
 router.get('/rmacc', async (req, res) => {
-        let data = await client.getAccount(req.body.name);
+        let data = await Account.findOne({name: req.query.name})
         if(!data){
                 res.status(404).send({message: "Le compte n'existe pas ou a déjà été supprimé de la base de données."});
         }else {
-                let dbUser = await User.findOne({ username : req.body.username});
+                let dbUser = await User.findOne({ username : req.query.username});
                 let acc = dbUser.accounts;
-                acc.splice(acc.indexOf(req.body.name),1);
+                acc.splice(acc.indexOf(req.query.name),1);
                 await updateUser(dbUser, {accounts: acc});
-                res.status(200).send({message: `Le compte ${req.body.name} a bien été supprimé.`});
+                res.status(200).send({message: `Le compte ${req.query.name} a bien été supprimé.`});
                 data.deleteOne();
                 
         }
        
 })
 
+router.get('/shownfts', async (req, res) => {
+        let user = await User.findOne({username : req.query.username})
+        var nfts = []
+        for(const accName of user.accounts){
+            let url = `https://wax.api.atomicassets.io/atomicassets/v1/assets?owner=${accName}&page=1&limit=1000&order=desc&sort=minted`
+            await fetch(url)
+            .then(res => res.json())
+            .then(async json => {
+                if (!json.data.length) return;
+                for(let i = 0; i < json.data.length ; i++){
+                    const data = json.data[i].data;
+                    const timeNFT = Math.floor((json.data[i].minted_at_time)/1000);
+                    const price = await getNFTPrice(json.data[i].asset_id)
+                    let nft = {
+                        id: json.data[i].asset_id,
+                        created_at_time: timeNFT,
+                        name: data.name,
+                        rarity: data.rarity,
+                        img: `https://cloudflare-ipfs.com/ipfs/${data.img}`,
+                        avg_price: `${price.avg_eur} EUR`,
+                        last_sold_eur: `${price.last_sold_eur} EUR`,
+                        username : accName
+                    }
+                    nfts.push(nft)
+                }
+            })
+        }
+        res.status(200).send({nfts : nfts})
 
+})
+
+router.get('/leaderboard', async (req, res) => {
+    let users = await User.find({});
+    let usersLeadboard = [];
+    var leaderboard = [];
+    var nbWaxEUR = await waxPrice();
+    var nbTlmEUR = await tlmPrice();
+    for (const user in users) {
+        let nbWax = 0;
+        let nbTlm = 0;
+        for(const accName of users[user].accounts){
+            let acc = await Account.findOne({name: accName});
+            nbWax += parseFloat(acc.nbWAX);
+            nbTlm += parseFloat(acc.nbTLM);
+        }
+        var tlmToWax = nbTlm * nbTlmEUR;
+        var totalWax = tlmToWax + nbWax;
+        var WaxToEur = totalWax * nbWaxEUR;
+        if (users[user].accounts.length > 0 ) {
+            usersLeadboard.push({
+                username: users[user].username,
+                nbrAccount: users[user].accounts.length,
+                wax: nbWax,
+                tlm: nbTlm,
+                eur: WaxToEur
+            })
+        }
+    }
+    usersLeadboard.sort(function (a, b) {
+        if ( a.eur < b.eur ){
+            return 1;
+        }
+        if ( a.eur > b.eur ){
+            return -1;
+        }
+        return 0
+    })
+    var i = 0;
+    for (const user in usersLeadboard) {
+        leaderboard.push({
+            position : i+1,
+            username : usersLeadboard[user].username,
+            wax : usersLeadboard[user].wax.toFixed(2),
+            tlm : usersLeadboard[user].tlm.toFixed(2),
+            eur : usersLeadboard[user].eur.toFixed(2),
+            nbrAccount : usersLeadboard[user].nbrAccount
+        })
+            i++;
+    }
+    console.log(leaderboard)
+    if(leaderboard)  res.status(200).send({leaderboard: leaderboard});
+    else res.status(404).send({message: "Probleme avec leaderboard"});
+   
+})
+const getNFTPrice = async nftid => {
+    let url = `https://www.nfthive.io/api/price-info/${nftid}`
+    const price = await fetch(url)
+        .then(res => res.json())
+        .then(async json => {
+            let waxeur = await client.waxPrice();
+            let prices = {
+                avg_eur : parseFloat(json.average)*waxeur,
+                last_sold_eur : parseFloat(json.last_sold_usd)
+            }
+            return prices
+        })
+    return price;
+  }
 
 const getTlmPrice = async () => {
         return axios
@@ -224,7 +330,31 @@ const getTlmPrice = async () => {
             
         }
     
-
+        const tlmPrice = async () => {
+            return await axios
+            .get("https://wax.alcor.exchange/api/markets")
+                .then(res => {
+                    var currencies = res.data
+                    var tlmCurrencies = 0;
+                    for (item in currencies) {
+                        if(currencies[item].id == undefined) continue;
+                        if (currencies[item].id == 26) {
+                            tlmCurrencies = currencies[item].last_price;
+                        }
+                    }
+                return tlmCurrencies; 
+             }
+            )
+        }
+        
+        const waxPrice = async () => {
+            return await axios
+            .get("https://api.coingecko.com/api/v3/simple/price?ids=wax&vs_currencies=EUR")
+            .then(res => {
+                    return res.data.wax.eur
+             }
+            )
+        }
 // GET USERNAME
 
 // get account by username

@@ -11,6 +11,9 @@ module.exports.run = async (client,message,args) => {
         let embed2 = new MessageEmbed()
             .setAuthor(`${message.member.displayName}`,message.member.user.displayAvatarURL())
             .setTimestamp();
+        let embed3 = new MessageEmbed()
+            .setAuthor(`${message.member.displayName}`,message.member.user.displayAvatarURL())
+            .setTimestamp();
         let i = 0;
             
         if(!user.accounts.length) {
@@ -36,7 +39,11 @@ module.exports.run = async (client,message,args) => {
                 embed2
                     .addField(`${acc.name}`,`Fonctionne: ${acc.isShitListed ? ":x:" : ":white_check_mark:"}\nNombre de WAX: ${acc.nbWAX}\nNombre de TLM: ${acc.nbTLM}`)
                     .setColor("#006699");
-                }else{
+                }else if(i>48){
+                    embed3
+                    .addField(`${acc.name}`,`Fonctionne: ${acc.isShitListed ? ":x:" : ":white_check_mark:"}\nNombre de WAX: ${acc.nbWAX}\nNombre de TLM: ${acc.nbTLM}`)
+                    .setColor("#006699");
+                }else if(i<=24){
                     embed
                     .addField(`${acc.name}`,`Fonctionne: ${acc.isShitListed ? ":x:" : ":white_check_mark:"}\nNombre de WAX: ${acc.nbWAX}\nNombre de TLM: ${acc.nbTLM}`)
                     .setColor("#006699");
@@ -51,12 +58,14 @@ module.exports.run = async (client,message,args) => {
         var WaxToEur = totalWax * nbWaxEUR;
         if(i>24){
             embed2.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
-        }else{
+        }else if(i>48){
+            embed3.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
+        }else if(i<=24){
             embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
         }
         client.users.cache.get(message.member.user.id).send(embed);
         if(i>24) client.users.cache.get(message.member.user.id).send(embed2);
-
+        if(i>48) client.users.cache.get(message.member.user.id).send(embed3);
         message.delete();
 
 };
