@@ -169,7 +169,9 @@ module.exports = client => {
         return await axios
         .get("https://api.coingecko.com/api/v3/simple/price?ids=alien-worlds&vs_currencies=EUR")
         .then(res => {
-                return res.data.alien-worlds.eur
+                var value = 'alien-worlds';
+                var tmp = res.data;
+                return tmp["alien-worlds"].eur
          }
         )
     }
