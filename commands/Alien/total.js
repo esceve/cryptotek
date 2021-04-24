@@ -21,11 +21,11 @@ module.exports.run = async (client,message,args) => {
         }
     }
     let nbWaxEUR = await client.waxPrice();
-    let nbTlmEUR = await client.tlmPrice();
-    var tlmToWax = nbTlm * nbTlmEUR;
-    var totalWax = tlmToWax + nbWax;
-    var WaxToEur = totalWax * nbWaxEUR;
-    embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${WaxToEur} EUR`)
+    let nbTlmEUR = await client.tlmeurPrice();
+    var tlmToEUr = nbTlm * nbTlmEUR;
+    var WaxToEur = nbWax * nbWaxEUR;
+    var EurTot = tlmToEUr + WaxToEur;
+    embed.addField(`Total: `,`Nombre de WAX : ${nbWax} WAX\nNombre de TLM : ${nbTlm} TLM\nConversion: ${EurTot} EUR`)
     message.channel.send(embed);
 
 
