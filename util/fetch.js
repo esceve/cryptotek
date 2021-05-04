@@ -178,14 +178,14 @@ module.exports = client => {
 
     client.isShitListed = async accName => {
         
-        let url = `https://wax.eosusa.news/v2/history/get_actions?account=${accName}&limit=1&skip=0&filter=*:transfer&transfer.to=${accName}`
+        let url = `https://wax.eosrio.io/v2/history/get_actions?account=${accName}&skip=0&limit=1&sort=desc&transfer.to=${accName}`
         await fetch(url)
             .then(res => res.json())
             .then(async json => {
                 if(!json.actions[0]) return;
                     let data = json.actions[0].act.data;
                     if (data.memo == "ALIEN WORLDS - Mined Trilium"){
-                        if(parseFloat(data.quantity.split(' ')[0]) <= 0.00999){
+                        if(parseFloat(data.quantity.split(' ')[0]) <= 0.0009){
                             await client.updateAccount(accName, { isShitListed : true});
                         }
                     }
@@ -356,7 +356,7 @@ module.exports = client => {
         }
 
         client.dontMint = async (accName) =>{
-            let url = `https://wax.eosusa.news/v2/history/get_actions?account=${accName}&limit=1&skip=0&filter=*:transfer&transfer.to=${accName}`
+            let url = `https://wax.eosrio.io/v2/history/get_actions?account=${accName}&skip=0&limit=1&sort=desc&transfer.to=${accName}`
             return await fetch(url)
             .then(res => res.json())
             .then(async json => {
@@ -410,8 +410,8 @@ module.exports = client => {
                         embed
                             .addField(`${userAcc} : `, `:watch:`)
                     }
-                    // client.users.cache.get(`${users[user].userID}`).send(embed);
-                    // client.channels.cache.get('824559024720183296').send(embed);
+                    client.users.cache.get(`${users[user].userID}`).send(embed);
+                    client.channels.cache.get('824559024720183296').send(embed);
                 
             }
         }
