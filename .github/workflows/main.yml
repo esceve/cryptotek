@@ -27,7 +27,7 @@ jobs:
       - name : get current version tag
         env:
           GIT_TAG: "${GITHUB_REF_NAME#v}"
-        run: echo ${GIT_TAG}
+        run: echo ${GITHUB_REF_NAME#v}
         
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
