@@ -9,6 +9,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  release:
+    types: [published]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,6 +24,11 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name : get current version tag
+        env:
+          GIT_TAG: sed -n 's/^v//p' ${{ github.ref_name }}
+        run: echo ${GIT_TAG}
+        
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
