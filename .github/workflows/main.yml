@@ -26,7 +26,7 @@ jobs:
     steps:
       - name : get current version tag
         env:
-          GIT_TAG: sed -n 's/^v//p' ${{ github.ref_name }}
+          GIT_TAG: "${GITHUB_REF_NAME#v}"
         run: echo ${GIT_TAG}
         
       - name: executing remote ssh commands using password
